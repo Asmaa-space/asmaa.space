@@ -201,22 +201,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       5. تأثير الآلة الكاتبة الأولي
-       ========================================================================== */
-    const prologueTextElement = document.getElementById('prologue-text');
-    let originalText = prologueTextElement.getAttribute('data-ar');
-    prologueTextElement.textContent = ''; 
-    let charIndex = 0;
-    
-    function typeWriter() {
-        if (charIndex < originalText.length) {
-            prologueTextElement.textContent += originalText.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeWriter, 35);
-        }
-    }
-    updateLanguage();
-    setTimeout(typeWriter, 1000);
+       5. تأثير الآلة الكاتبة الأولي (تم الإصلاح لضمان عدم التكرار)
+       ========================================================================== */
+    const prologueTextElement = document.getElementById('prologue-text');
+    // نحدد النص الأصلي بناءً على اللغة المختارة حالياً عند تحميل الصفحة
+    let originalText = currentLang === 'ar' ? prologueTextElement.getAttribute('data-ar') : prologueTextElement.getAttribute('data-en');
+    
+    prologueTextElement.textContent = ''; // تفريغ العنصر تماماً قبل البدء
+    let charIndex = 0;
+    
+    function typeWriter() {
+        if (charIndex < originalText.length) {
+            prologueTextElement.textContent += originalText.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, 35);
+        }
+    }
+
+    // ملاحظة: تأكدي أن updateLanguage() لا تقوم بتغيير نص prologue-text أثناء عمل دالة الكتابة
+    updateLanguage(); 
+    
+    // تشغيل التأثير بعد ثانية واحدة من تحميل الصفحة
+    setTimeout(typeWriter, 1000);
+
 
     /* ==========================================================================
        6. نموذج التواصل الحقيقي (FormSubmit AJAX)
