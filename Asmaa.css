@@ -1,0 +1,194 @@
+/* ================= المتغيرات الأساسية ================= */
+:root {
+    --bg-gradient-1: #2a1b3d; --bg-gradient-2: #44318d; --bg-gradient-3: #a4b3b6;
+    --panel-bg: rgba(42, 27, 61, 0.65); --panel-border: rgba(212, 175, 55, 0.8); --panel-border-inner: rgba(212, 175, 55, 0.4);
+    --text-main: #fcfcfc; --text-muted: #dcdcdc; --text-gold: #FFD700;
+    --glow-color: rgba(212, 175, 55, 0.6); --magic-pink: #d83f87; --error-color: #ff4b2b;
+}
+
+body.day-mode {
+    --bg-gradient-1: #fce4ec; --bg-gradient-2: #e1bee7; --bg-gradient-3: #bbdefb;
+    --panel-bg: rgba(255, 255, 255, 0.55); --panel-border: #d4af37; --panel-border-inner: #bcaaa4;
+    --text-main: #4a3b52; --text-muted: #6d597a; --text-gold: #b58900;
+    --glow-color: rgba(255, 182, 193, 0.8); --magic-pink: #ff80ab;
+}
+
+/* ================= حل مشكلة عمى الألوان (High Contrast) ================= */
+body.colorblind-mode {
+    --bg-gradient-1: #222222 !important; --bg-gradient-2: #444444 !important; --bg-gradient-3: #666666 !important;
+    --panel-bg: rgba(255, 255, 255, 0.95) !important;
+    --panel-border: #000000 !important; --panel-border-inner: #555555 !important;
+    --text-main: #000000 !important; --text-muted: #333333 !important; --text-gold: #000000 !important;
+    --glow-color: rgba(0, 0, 0, 0.2) !important; --magic-pink: #000000 !important;
+    filter: grayscale(100%) contrast(1.2) !important;
+}
+body.colorblind-mode .royal-title, body.colorblind-mode .section-intro { color: #ffffff !important; text-shadow: 2px 2px 4px #000 !important; }
+body.colorblind-mode .glass-panel, body.colorblind-mode .glass-panel * { color: #000000 !important; text-shadow: none !important; border-color: #000000 !important; }
+body.colorblind-mode .magic-input, body.colorblind-mode .magical-btn { background: #ffffff !important; color: #000000 !important; border: 2px solid #000000 !important; }
+body.colorblind-mode .magical-btn:hover { background: #000000 !important; color: #ffffff !important; }
+
+/* ================= الإعدادات العامة والتجاوب الأساسي ================= */
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+[dir="rtl"] body { font-family: 'Tajawal', 'Nunito', sans-serif; }
+[dir="ltr"] body { font-family: 'Nunito', sans-serif; }
+body { color: var(--text-main); background-color: var(--bg-gradient-1); transition: 1s ease; overflow-x: hidden; width: 100%; max-width: 100%; }
+
+h1, h2, h3, .royal-title { font-family: 'Cinzel Decorative', 'Tajawal', serif; color: var(--text-gold); text-shadow: 0 0 10px var(--glow-color); }
+
+/* ================= المؤشر السحري ================= */
+#magic-cursor { position: fixed; left: 0 !important; top: 0 !important; right: auto !important; bottom: auto !important; width: 30px; height: 30px; pointer-events: none; z-index: 999999; filter: drop-shadow(0 0 10px var(--glow-color)); direction: ltr !important; }
+.particle { position: absolute; left: 0 !important; top: 0 !important; right: auto !important; bottom: auto !important; border-radius: 50%; background: radial-gradient(circle, #fff 0%, var(--text-gold) 100%); pointer-events: none; z-index: 999998; box-shadow: 0 0 8px var(--glow-color); direction: ltr !important; }
+.cursor-click-effect { position: fixed; border: 2px solid var(--text-gold); border-radius: 50%; pointer-events: none; z-index: 999997; transform: translate(-50%, -50%); animation: ripple 0.6s forwards; }
+
+/* ================= شريط التقدم والمتتبع ولوحة التحكم ================= */
+#system-status-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--text-gold); box-shadow: 0 0 10px var(--glow-color); width: 0%; z-index: 99999; }
+#scroll-tracker { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 15px; padding: 10px; }
+[dir="rtl"] #scroll-tracker { right: 15px; } [dir="ltr"] #scroll-tracker { left: 15px; }
+.tracker-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--text-gold); transition: 0.3s; position: relative; }
+.tracker-dot.active { background: var(--text-gold); box-shadow: 0 0 10px var(--glow-color); transform: scale(1.3); }
+.tracker-dot::before { content: attr(data-tooltip); position: absolute; top: 50%; transform: translateY(-50%); background: var(--panel-bg); color: var(--text-main); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; white-space: nowrap; opacity: 0; transition: 0.3s; border: 1px solid var(--panel-border); pointer-events: none; }
+[dir="rtl"] .tracker-dot::before { right: 25px; } [dir="ltr"] .tracker-dot::before { left: 25px; }
+.tracker-dot:hover::before { opacity: 1; }
+
+#back-to-top { position: fixed; bottom: 30px; z-index: 1000; display: none; width: 50px; height: 50px; border-radius: 50%; justify-content: center; align-items: center; text-decoration: none; }
+[dir="rtl"] #back-to-top { left: 30px; } [dir="ltr"] #back-to-top { right: 30px; }
+
+#control-panel { position: fixed; top: 20px; z-index: 1000; display: flex; gap: 10px; background: var(--panel-bg); padding: 5px; border-radius: 30px; border: 1px solid var(--panel-border-inner); backdrop-filter: blur(10px); }
+[dir="rtl"] #control-panel { left: 20px; } [dir="ltr"] #control-panel { right: 20px; }
+.control-btn { width: 40px; height: 40px; border-radius: 50%; background: transparent; border: 1px solid transparent; color: var(--text-main); font-size: 1.2rem; transition: 0.3s; }
+.control-btn:hover { border-color: var(--text-gold); background: rgba(255,255,255,0.1); transform: scale(1.1); }
+#lang-toggle { font-size: 0.8rem; font-weight: bold; }
+
+/* ================= الخلفية والهالات الضوئية ================= */
+#magical-background { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -10; }
+.gradient-layer { position: absolute; width: 100%; height: 100%; background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-gradient-3) 100%); background-size: 400% 400%; animation: gradientFlow 15s ease infinite; }
+@keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.floating-symbols { position: absolute; width: 100%; height: 100%; pointer-events: none; }
+.symbol { position: absolute; font-size: 1.5rem; color: var(--glow-color); opacity: 0.5; animation: floatSymbol 10s infinite alternate ease-in-out; }
+.s1 { top: 10%; left: 20%; animation-delay: 0s; } .s2 { top: 30%; right: 15%; animation-delay: 2s; } .s3 { bottom: 20%; left: 10%; animation-delay: 4s; } .s4 { bottom: 10%; right: 25%; animation-delay: 1s; } .s5 { top: 50%; left: 50%; animation-delay: 3s; font-size: 2rem; }
+@keyframes floatSymbol { 0% { transform: translateY(0) rotate(0deg) scale(0.8); } 100% { transform: translateY(-40px) rotate(45deg) scale(1.2); } }
+
+.magic-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: floatOrb 20s infinite alternate ease-in-out; pointer-events: none; }
+.orb-1 { width: 400px; height: 400px; background: var(--magic-pink); top: -100px; left: -100px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: #00f2fe; bottom: -150px; right: -150px; animation-delay: -5s; }
+body.day-mode .orb-1 { background: #ffd700; } body.day-mode .orb-2 { background: #ff80ab; }
+@keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(100px, 100px) scale(1.2); } }
+
+/* ================= الأقسام والتنسيقات المشتركة ================= */
+.section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 20px; position: relative; z-index: 1; }
+.header-section { margin-bottom: 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; max-width: 800px; width: 100%; }
+.section-intro { font-size: 1.1rem; line-height: 1.8; color: var(--text-muted); font-style: italic; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+.glass-panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 2px solid var(--panel-border); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(255,255,255,0.1); border-radius: 16px; position: relative; overflow: hidden; width: 100%; }
+.glass-panel::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to bottom right, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 100%); transform: rotate(30deg); pointer-events: none; }
+
+.ornate-panel { padding: 8px; width: 100%; max-width: 800px; }
+.panel-inner-border { border: 1px dashed var(--panel-border-inner); border-radius: 12px; padding: 3rem; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; }
+
+.magical-btn { background: transparent; border: 2px solid var(--panel-border); color: var(--text-gold); font-family: inherit; font-size: 1.1rem; font-weight: bold; padding: 10px 25px; border-radius: 30px; transition: all 0.4s ease; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; position: relative; z-index: 2; }
+.magical-btn:hover { background: var(--panel-border); color: var(--bg-gradient-1); box-shadow: 0 0 20px var(--glow-color); transform: translateY(-2px); }
+.gold-glow { box-shadow: 0 0 15px var(--glow-color); background: rgba(212, 175, 55, 0.1); }
+.mt-2 { margin-top: 20px; } .mb-4 { margin-bottom: 40px; }
+
+.divider { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px 0 25px 0; width: 100%; max-width: 300px; }
+.divider .line { height: 1px; flex-grow: 1; background: linear-gradient(90deg, transparent, var(--panel-border), transparent); }
+.divider .star { color: var(--text-gold); font-size: 1.2rem; }
+
+/* ================= طيران البطاقات ================= */
+@keyframes magicalFloat { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
+.floating-card { animation: magicalFloat 6s ease-in-out infinite; }
+.floating-card:nth-child(even) { animation-delay: 1.5s; animation-duration: 7s; }
+.floating-card:nth-child(3n) { animation-delay: 0.5s; animation-duration: 5.5s; }
+.floating-slow { animation: magicalFloat 8s ease-in-out infinite; }
+
+/* ================= كتاب التعاويذ ================= */
+.spellbook-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; max-width: 1100px; }
+.spell-chapter { padding: 25px; text-align: start; transition: 0.3s; z-index: 2; }
+.spell-chapter:hover { border-color: var(--text-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(212, 175, 55, 0.2); }
+.spell-icon { font-size: 2.5rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px var(--glow-color)); }
+.spell-subtitle { color: var(--magic-pink); font-size: 0.9rem; font-family: 'Nunito', sans-serif; margin-bottom: 15px; border-bottom: 1px dashed var(--panel-border-inner); padding-bottom: 10px; }
+.spell-chapter p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; color: var(--text-muted); }
+.spell-list { list-style: none; }
+.spell-list li { font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); line-height: 1.4; }
+.highlight-chapter { border: 2px solid var(--magic-pink); background: rgba(216, 63, 135, 0.1); }
+
+/* ================= صندوق الأدوات ================= */
+.potions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; width: 100%; max-width: 1200px; }
+.potion-card { padding: 25px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 2; }
+.potion-icon { font-size: 3rem; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2)); transition: 0.3s; }
+.potion-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: var(--text-gold); }
+.potion-desc { font-size: 0.85rem; line-height: 1.5; opacity: 0.85; }
+.potion-card:hover { border-color: var(--text-gold); }
+.potion-card:hover .potion-icon { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 20px var(--glow-color)); }
+
+/* ================= المشاريع (Tarot) ================= */
+.tarot-deck { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; width: 100%; max-width: 1200px; }
+.tarot-card-container { width: 220px; height: 300px; cursor: none; }
+.tarot-card { width: 100%; height: 100%; transition: 0.4s; }
+.tarot-front { width: 100%; height: 100%; border-radius: 15px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+.tarot-border { border: 2px solid var(--panel-border-inner); width: 100%; height: 100%; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.tarot-icon { font-size: 3rem; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--glow-color)); }
+.tarot-name { font-size: 1.1rem; font-weight: bold; }
+.tarot-card-container:hover .tarot-card { transform: scale(1.05); }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 0; visibility: hidden; transition: 0.4s; }
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal-content { width: 90%; max-width: 500px; padding: 10px; transform: scale(0.8); transition: 0.4s; position: relative; }
+.modal-overlay.active .modal-content { transform: scale(1); }
+.modal-inner { border: 2px dashed var(--panel-border-inner); border-radius: 10px; padding: 40px 20px; text-align: center; }
+.close-modal-btn { position: absolute; top: 15px; background: transparent; border: none; font-size: 1.5rem; color: var(--text-gold); z-index: 10; font-weight: bold; transition: 0.3s; }
+[dir="rtl"] .close-modal-btn { left: 20px; } [dir="ltr"] .close-modal-btn { right: 20px; }
+.close-modal-btn:hover { transform: rotate(90deg) scale(1.2); color: var(--error-color); }
+.coming-soon-text { font-size: 2rem; color: var(--magic-pink); animation: pulse 2s infinite; margin-top: 10px; }
+
+/* ================= التواصل ================= */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; max-width: 1000px; align-items: center; z-index: 2; }
+.social-cards-column { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+.social-portal-card { display: flex; align-items: center; gap: 20px; padding: 20px; text-decoration: none; transition: 0.3s; width: 100%; }
+.social-portal-card:hover { border-color: var(--text-gold); box-shadow: 0 10px 30px var(--glow-color); transform: translateX(-10px); }
+[dir="ltr"] .social-portal-card:hover { transform: translateX(10px); }
+.social-portal-card .portal-icon { font-size: 2.5rem; filter: drop-shadow(0 0 10px var(--glow-color)); }
+.portal-info h4 { color: var(--text-gold); font-size: 1.2rem; margin-bottom: 5px; }
+.portal-info p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+
+.summoning-layout { width: 100%; position: relative; display: flex; flex-direction: column; align-items: center; }
+.magic-circle-bg { position: absolute; width: 140%; height: 140%; top: -20%; left: -20%; z-index: -1; opacity: 0.3; pointer-events: none; }
+#summon-form { width: 100%; z-index: 2; box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+.input-group { width: 100%; margin-bottom: 20px; text-align: start; }
+.input-group label { display: block; color: var(--text-gold); margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
+.magic-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border-inner); color: var(--text-main); padding: 15px; border-radius: 8px; font-family: inherit; font-size: 1rem; transition: 0.3s; }
+body.day-mode .magic-input { background: rgba(255,255,255,0.6); color: #000; }
+.magic-input:focus { outline: none; border-color: var(--text-gold); box-shadow: 0 0 20px var(--glow-color); background: rgba(0,0,0,0.5); }
+
+/* ================= التجاوب القوي مع الشاشات (Mobile Responsiveness) ================= */
+@media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+    .social-portal-card:hover { transform: translateY(-5px); }
+    [dir="ltr"] .social-portal-card:hover { transform: translateY(-5px); }
+}
+@media (max-width: 768px) {
+    .section { padding: 80px 15px; }
+    .royal-title { font-size: 1.5rem; }
+    .panel-inner-border { padding: 1.5rem 1rem; }
+    .typewriter-container { min-height: 100px; }
+    
+    .spellbook-grid { grid-template-columns: 1fr; }
+    .potions-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .potion-card { padding: 15px 10px; }
+    .potion-icon { font-size: 2.2rem; }
+    
+    .tarot-deck { gap: 1rem; }
+    .tarot-card-container { width: 100%; max-width: 280px; height: 320px; }
+    
+    .social-portal-card { flex-direction: column; text-align: center; gap: 10px; }
+    .magical-btn { width: 100%; justify-content: center; font-size: 1rem; }
+    
+    #scroll-tracker { display: none; }
+    #back-to-top { display: flex !important; bottom: 20px; }
+    .magic-orb { display: none; } /* للحفاظ على سرعة الجوال */
+}
+@media (max-width: 480px) {
+    .potions-grid { grid-template-columns: 1fr; }
+    .tarot-card-container { height: 280px; }
+}
