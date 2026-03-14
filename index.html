@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-ar="مخطوطة أسماء السحرية" data-en="Asmaa's Magical Grimoire">مخطوطة أسماء السحرية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Asmaa.css">
+</head>
+<body>
+    <div id="system-status-bar"></div>
+
+    <nav id="scroll-tracker" aria-label="تتبع المسار">
+        <a href="#prologue" class="tracker-dot active" data-tooltip="المطلع"></a>
+        <a href="#spellbook-skills" class="tracker-dot" data-tooltip="سجل التعاويذ"></a>
+        <a href="#tools-armory" class="tracker-dot" data-tooltip="خزانة الأدوات"></a>
+        <a href="#projects" class="tracker-dot" data-tooltip="الأرشيف الخفي"></a>
+        <a href="#contact" class="tracker-dot" data-tooltip="بوابات العبور"></a>
+    </nav>
+
+    <a href="#prologue" id="back-to-top" class="magical-btn" aria-label="العودة للأعلى"><span class="icon">↟</span></a>
+
+    <div id="magic-cursor" dir="ltr">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="#FFF7D6" stroke="#D4AF37" stroke-width="1"/>
+        </svg>
+    </div>
+    <div id="particles-container" dir="ltr"></div>
+
+    <div id="control-panel">
+        <button id="lang-toggle" class="control-btn" aria-label="تغيير اللغة" data-tooltip="EN / ع"><span class="icon">ع/EN</span></button>
+        <button id="theme-toggle" class="control-btn" aria-label="تغيير الثيم" data-tooltip="الوضع الليلي/النهاري"><span class="icon">🌙</span></button>
+        <button id="colorblind-toggle" class="control-btn" aria-label="وضع عمى الألوان" data-tooltip="وضع التباين"><span class="icon">👁️</span></button>
+    </div>
+
+    <div id="magical-background">
+        <div class="gradient-layer"></div>
+        <div class="magic-orb orb-1"></div>
+        <div class="magic-orb orb-2"></div>
+        <div class="floating-symbols">
+            <span class="symbol s1">✦</span><span class="symbol s2">✧</span><span class="symbol s3">⋆</span><span class="symbol s4">❀</span><span class="symbol s5">☾</span>
+        </div>
+    </div>
+
+    <main id="app-container">
+        
+        <section id="prologue" class="section">
+            <div class="ornate-panel glass-panel tilt-element floating-slow">
+                <div class="panel-inner-border">
+                    <div class="magical-crest">
+                        <svg viewBox="0 0 100 100" class="spin-slow">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#D4AF37" stroke-width="1" stroke-dasharray="5,5"/>
+                            <path d="M50 10 L60 40 L90 50 L60 60 L50 90 L40 60 L10 50 L40 40 Z" fill="rgba(212, 175, 55, 0.2)" stroke="#D4AF37" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <h1 class="royal-title translate" data-ar="المقدمة" data-en="The Prologue">المقدمة</h1>
+                    <div class="divider"><span class="line"></span><span class="star">✦</span><span class="line"></span></div>
+                    <div class="typewriter-container">
+                        <p id="prologue-text" class="story-text translate" data-ar="يُحكى أن مستكشفةً شغوفةً تُدعى أسماء، تقتفي أثر السحر الخفي بين الإنسان والتقنية، لتنسج من خيوط الأكواد والبيانات عوالم رقمية تنبض بالحياة." data-en="Tale tells of an avid explorer named Asmaa, who seeks the hidden magic between humans and technology, weaving code and data into living digital realms.">
+                        </p>
+                    </div>
+                    <a href="#spellbook-skills" class="magical-btn gold-glow mt-2">
+                        <span class="translate" data-ar="تصفح مخطوطة التعاويذ" data-en="Unfurl the Grimoire">تصفح مخطوطة التعاويذ</span>
+                        <span class="btn-sparkle">↓</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="spellbook-skills" class="section">
+            <div class="header-section">
+                <h2 class="royal-title translate" data-ar="سجل تعاويذ التصميم" data-en="Design Grimoire">سجل تعاويذ التصميم</h2>
+                <div class="divider"><span class="line"></span><span class="star">✦</span><span class="line"></span></div>
+                <p class="section-intro translate" data-ar="في أرجاء عالمي الرقمي، لا تُخلق التجارب الاستثنائية محض صدفة؛ بل تُشيّد على أساسٍ متين من الفهم العميق للإنسان وطبيعة تفاعله مع التقنية. تخصصي يمنحني البصيرة لقراءة رغبات المستخدمين، وتحويلها إلى تجارب نابضة بالحياة." data-en="In my digital realm, exceptional experiences are not conjured by mere chance; they are architected upon a profound understanding of human-computer interaction, translating user needs into vibrant, living experiences.">
+                    في أرجاء عالمي الرقمي، لا تُخلق التجارب الاستثنائية محض صدفة...
+                </p>
+            </div>
+
+            <div class="spellbook-grid">
+                <div class="spell-chapter glass-panel floating-card">
+                    <div class="spell-icon">🔮</div>
+                    <h3 class="translate" data-ar="فن قراءة العقول" data-en="The Art of Mind Reading">فن قراءة العقول</h3>
+                    <h4 class="spell-subtitle">UX Design & Research</h4>
+                    <p class="translate" data-ar="كما يفك الحكماء طلاسم الخرائط العتيقة، أقرأ أنا سلوكيات المستخدمين لأستوعب مسارات رحلتهم عبر العوالم الرقمية." data-en="Just as scholars decipher ancient maps, I trace user behaviors to truly comprehend their journeys across digital landscapes.">كما يفك الحكماء طلاسم الخرائط العتيقة، أقرأ أنا سلوكيات المستخدمين.</p>
+                    <ul class="spell-list translate-list" data-ar="دراسة السلوك والدوافع|رسم مسارات المستخدمين|إجراء تجارب قابلية الاستخدام" data-en="Decoding Behaviors & Needs|Mapping User Journeys|Conducting Usability Trials"></ul>
+                </div>
+                <div class="spell-chapter glass-panel floating-card">
+                    <div class="spell-icon">✨</div>
+                    <h3 class="translate" data-ar="فن تشكيل العوالم" data-en="The Art of World Shaping">فن تشكيل العوالم</h3>
+                    <h4 class="spell-subtitle">UI Design & Front-End</h4>
+                    <p class="translate" data-ar="هنا، تتجسد الأفكار المجردة لتصبح واجهات مرئية، يألفها المستخدم ويتفاعل معها بانسجام." data-en="The realm where abstract concepts materialize into tangible, visually captivating interfaces that invite harmonious interaction.">هنا، تتجسد الأفكار المجردة لتصبح واجهات مرئية.</p>
+                    <ul class="spell-list translate-list" data-ar="صياغة الواجهات الرقمية|بناء نماذج تفاعلية دقيقة|الارتقاء بالتجربة البصرية" data-en="Crafting Digital Interfaces|Forging High-Fidelity Prototypes|Refining Visual Aesthetics"></ul>
+                </div>
+                <div class="spell-chapter glass-panel floating-card">
+                    <div class="spell-icon">⚖️</div>
+                    <h3 class="translate" data-ar="هندسة التناغم" data-en="Engineering Harmony">هندسة التناغم</h3>
+                    <h4 class="spell-subtitle">Usability & Interaction</h4>
+                    <p class="translate" data-ar="في هذا البُعد، أهندس حلقة الوصل بين الإنسان والآلة، ليغدو التفاعل انسيابياً كتدفق السحر." data-en="In this dimension, I forge the vital link between human and machine, rendering interactions as seamless as flowing magic.">في هذا البُعد، أهندس حلقة الوصل بين الإنسان والآلة.</p>
+                    <ul class="spell-list translate-list" data-ar="تحليل ديناميكية التفاعل|تصميم أنماط حركية سلسة|تطبيق معايير السهولة والانسيابية" data-en="Analyzing Interactions|Designing Fluid Motion Patterns|Applying Usability Standards"></ul>
+                </div>
+                <div class="spell-chapter glass-panel floating-card">
+                    <div class="spell-icon">🏛️</div>
+                    <h3 class="translate" data-ar="عمارة الفضاء الرقمي" data-en="Architecture of Digital Space">عمارة الفضاء الرقمي</h3>
+                    <h4 class="spell-subtitle">Info Architecture & UX Writing</h4>
+                    <p class="translate" data-ar="كل نظام رقمي هو كونٌ مصغر، وتكمن مهارتي في هندسة أرجائه ليكون جلياً، ويرشد الزائرين في رحلة استكشافهم." data-en="Every digital system is a microcosm; my craft is architecting its structure to be intuitive, guiding visitors through their exploration.">كل نظام رقمي هو كونٌ مصغر، وتكمن مهارتي في هندسة أرجائه.</p>
+                    <ul class="spell-list translate-list" data-ar="هيكلة فضاءات المعلومات|بناء شبكات تنقل ذكية|صياغة نصوص تجربة المستخدم" data-en="Structuring Information Spaces|Building Smart Navigation Networks|Composing UX Narratives"></ul>
+                </div>
+                <div class="spell-chapter glass-panel floating-card">
+                    <div class="spell-icon">🌍</div>
+                    <h3 class="translate" data-ar="سحر الشمولية" data-en="The Magic of Inclusion">سحر الشمولية</h3>
+                    <h4 class="spell-subtitle">Accessibility</h4>
+                    <p class="translate" data-ar="الإبداع الحقيقي لا يُقصي أحداً؛ فالتجربة الرقمية المتكاملة يجب أن تشرّع أبوابها للجميع دون استثناء." data-en="True innovation leaves no one behind; a holistic digital experience must open its doors to all, without exception.">الإبداع الحقيقي لا يُقصي أحداً؛ فالتجربة الرقمية المتكاملة يجب أن تشرّع أبوابها للجميع.</p>
+                    <ul class="spell-list translate-list" data-ar="تطبيق معايير الوصول العالمية|تمكين ذوي الهمم رقمياً|ابتكار حلول تقنية شاملة" data-en="Universal Accessibility Standards|Empowering Disability Inclusion|Forging Holistic Solutions"></ul>
+                </div>
+                <div class="spell-chapter glass-panel highlight-chapter floating-card">
+                    <div class="spell-icon">💖</div>
+                    <h3 class="translate" data-ar="الطاقات الكامنة" data-en="Latent Energies">الطاقات الكامنة</h3>
+                    <h4 class="spell-subtitle translate" data-ar="المهارات الناعمة" data-en="Soft Skills">المهارات الناعمة</h4>
+                    <p class="translate" data-ar="ثمة قوى إنسانية خفية تمدّ كل مشروع أعمل عليه بالروح:" data-en="Ethereal human forces breathe life into every project I undertake:">ثمة قوى إنسانية خفية تمدّ كل مشروع أعمل عليه بالروح:</p>
+                    <ul class="spell-list translate-list" data-ar="الذكاء العاطفي وسرعة التكيف|توظيف السرد القصصي لتبسيط التعقيد|التفكير الإبداعي وحل المعضلات|القيادة وإلهام فرق العمل|إدارة المشاريع بمرونة تامة (Agile)" data-en="Emotional Intelligence & Adaptability|Storytelling to Simplify Complexity|Creative Problem Solving|Leadership & Inspiring Teams|Agile Project Management"></ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools-armory" class="section">
+            <div class="header-section">
+                <h2 class="royal-title translate" data-ar="خزانة الأدوات السحرية" data-en="The Magical Armory">خزانة الأدوات السحرية</h2>
+                <div class="divider"><span class="line"></span><span class="star">✦</span><span class="line"></span></div>
+                <p class="section-intro translate" data-ar="لا يقتصر التصميم في نظري على رصف العناصر عبر الشاشات؛ بل هو رحلة سبرٍ لأغوار النفس البشرية أولاً. وما هذه الأدوات سوى رفاق دربي في تلك الرحلة." data-en="To me, design transcends the mere arrangement of elements on a screen; it is a quest to fathom the human spirit first. These tools are my steadfast companions on this journey.">
+                    لا يقتصر التصميم في نظري على رصف العناصر عبر الشاشات؛ بل هو رحلة سبرٍ لأغوار النفس البشرية أولاً.
+                </p>
+            </div>
+            
+            <div class="potions-grid">
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🎨</div><h3 class="potion-name">Figma</h3><p class="potion-desc translate" data-ar="مرسمي السحري لتشييد الواجهات والنماذج التفاعلية." data-en="My sanctuary for sculpting interfaces and interactive prototypes.">مرسمي السحري لتشييد الواجهات والنماذج التفاعلية.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">⚡</div><h3 class="potion-name">Framer</h3><p class="potion-desc translate" data-ar="تعويذة الحركة التي تبث الروح في أوصال التصميم." data-en="The kinetic spell that breathes life into static designs.">تعويذة الحركة التي تبث الروح في أوصال التصميم.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🧠</div><h3 class="potion-name">Claude</h3><p class="potion-desc translate" data-ar="قريني التحليلي لفك طلاسم أبحاث المستخدمين." data-en="My analytical familiar for decoding user research.">قريني التحليلي لفك طلاسم أبحاث المستخدمين.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🔮</div><h3 class="potion-name">Gemini</h3><p class="potion-desc translate" data-ar="بلورتي السحرية لاستحضار المعرفة واستلهام الأفكار." data-en="My mystical crystal ball for summoning knowledge and inspiring ideas.">بلورتي السحرية لاستحضار المعرفة واستلهام الأفكار.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🧵</div><h3 class="potion-name">Stitch</h3><p class="potion-desc translate" data-ar="نول النسيج الذي يحول التصاميم إلى مكونات محكمة." data-en="The loom that weaves designs into structured, magical components.">نول النسيج الذي يحول التصاميم إلى مكونات محكمة.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">📱</div><h3 class="potion-name">Mobbin</h3><p class="potion-desc translate" data-ar="مخطوطتي المفتوحة لاستكشاف أفضل الممارسات المعاصرة." data-en="An ever-open grimoire for exploring modern best practices.">مخطوطتي المفتوحة لاستكشاف أفضل الممارسات المعاصرة.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">💻</div><h3 class="potion-name">Cursor</h3><p class="potion-desc translate" data-ar="الجسر الأثيري الذي يربط بين عوالم التصميم وشيفرات الكود." data-en="The ethereal bridge connecting the realms of design and code.">الجسر الأثيري الذي يربط بين عوالم التصميم وشيفرات الكود.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">❤️</div><h3 class="potion-name">Lovable</h3><p class="potion-desc translate" data-ar="معملي الخيميائي لتحويل الأفكار إلى نماذج حية بلمح البصر." data-en="My alchemical lab for transmuting concepts into living prototypes swiftly.">معملي الخيميائي لتحويل الأفكار إلى نماذج حية بلمح البصر.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">💬</div><h3 class="potion-name">ChatGPT</h3><p class="potion-desc translate" data-ar="رفيق العصف الذهني وصياغة التعاويذ النصية." data-en="A companion for brainstorming and drafting textual spells.">رفيق العصف الذهني وصياغة التعاويذ النصية.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">📊</div><h3 class="potion-name">Excel</h3><p class="potion-desc translate" data-ar="مصفوفة الأرقام التي تستخلص الرؤى من فوضى البيانات." data-en="The numeric matrix that extracts clear visions from the chaos of data.">مصفوفة الأرقام التي تستخلص الرؤى من فوضى البيانات.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">📅</div><h3 class="potion-name">Planner</h3><p class="potion-desc translate" data-ar="لوحتي الاستراتيجية لتنظيم المهام وتوزيع الطاقات." data-en="My strategic board for orchestrating quests and distributing tasks.">لوحتي الاستراتيجية لتنظيم المهام وتوزيع الطاقات.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🖼️</div><h3 class="potion-name">Canva</h3><p class="potion-desc translate" data-ar="مرسمي السريع لصياغة العروض البصرية الجذابة." data-en="My quick canvas for forging captivating visual presentations.">مرسمي السريع لصياغة العروض البصرية الجذابة.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">📄</div><h3 class="potion-name">Word</h3><p class="potion-desc translate" data-ar="لفافة التدوين لتوثيق الاكتشافات وصياغة التقارير." data-en="The scroll for documenting discoveries and drafting profound reports.">لفافة التدوين لتوثيق الاكتشافات وصياغة التقارير.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">📓</div><h3 class="potion-name">Notion</h3><p class="potion-desc translate" data-ar="قبو الذاكرة لتنظيم الرؤى والملاحظات وخطط المسير." data-en="The memory vault for organizing visions, notes, and battle plans.">قبو الذاكرة لتنظيم الرؤى والملاحظات وخطط المسير.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🗺️</div><h3 class="potion-name">Miro</h3><p class="potion-desc translate" data-ar="ساحة التأمل البيضاء لرسم مسارات وتجارب المستخدمين." data-en="The meditative canvas for mapping out user experiences and flows.">ساحة التأمل البيضاء لرسم مسارات وتجارب المستخدمين.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🧪</div><h3 class="potion-name">Maze</h3><p class="potion-desc translate" data-ar="متاهة الاختبار لاستشراف تفاعل المستخدمين وجمع أصداء تجاربهم." data-en="The testing labyrinth to observe user interactions and gather echoes of their experience.">متاهة الاختبار لاستشراف تفاعل المستخدمين وجمع أصداء تجاربهم.</p></div>
+                <div class="potion-card glass-panel floating-card"><div class="potion-icon">🔥</div><h3 class="potion-name">Hotjar</h3><p class="potion-desc translate" data-ar="عين البصيرة التي ترصد الخرائط الحرارية وتكشف مسارات التفاعل." data-en="The all-seeing eye that tracks heatmaps and reveals interaction trails.">عين البصيرة التي ترصد الخرائط الحرارية وتكشف مسارات التفاعل.</p></div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="header-section">
+                <h2 class="royal-title translate" data-ar="الأرشيف الخفي للمهام" data-en="The Arcane Archive of Quests">الأرشيف الخفي للمهام</h2>
+                <div class="divider"><span class="line"></span><span class="star">✦</span><span class="line"></span></div>
+            </div>
+
+            <div class="tarot-deck">
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="تعويذة الوصول الشامل" data-project-en="Spell of Universal Access"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">♿</div><h3 class="tarot-name translate" data-ar="الوصول الشامل" data-en="Accessibility">الوصول الشامل</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="متاهة هيكلة المعلومات" data-project-en="Labyrinth of Information Architecture"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">🗂️</div><h3 class="tarot-name translate" data-ar="هيكلة المعلومات" data-en="Info Architecture">هيكلة المعلومات</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="أسرار أبحاث المستخدم" data-project-en="Secrets of User Research"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">🔍</div><h3 class="tarot-name translate" data-ar="أبحاث المستخدم" data-en="UX Research">أبحاث المستخدم</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="واحات تصميم التفاعل" data-project-en="Oases of Interaction Design"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">🖱️</div><h3 class="tarot-name translate" data-ar="تصميم التفاعل" data-en="Interaction Design">تصميم التفاعل</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="نبض الواجهات المرئية" data-project-en="Pulse of Visual Interfaces"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">🎨</div><h3 class="tarot-name translate" data-ar="تصميم الواجهات" data-en="UI Design">تصميم الواجهات</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="مخطوطات نصوص التجربة" data-project-en="Scrolls of UX Writing"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">✍️</div><h3 class="tarot-name translate" data-ar="نصوص التجربة" data-en="UX Writing">نصوص التجربة</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="مرآة قابلية الاستخدام" data-project-en="Mirror of Usability"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">🧪</div><h3 class="tarot-name translate" data-ar="اختبار الاستخدام" data-en="Usability Testing">اختبار الاستخدام</h3></div></div></div></div>
+                <div class="tarot-card-container floating-card open-modal-btn" data-project-ar="خيمياء النماذج والتكويد" data-project-en="Alchemy of Prototyping & Code"><div class="tarot-card"><div class="tarot-front glass-panel"><div class="tarot-border"><div class="tarot-icon">💻</div><h3 class="tarot-name translate" data-ar="النماذج والتكويد" data-en="Prototypes & Code">النماذج والتكويد</h3></div></div></div></div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="header-section">
+                <h2 class="royal-title translate" data-ar="بوابات العبور" data-en="Portals of Communication">بوابات العبور</h2>
+                <div class="divider"><span class="line"></span><span class="star">✦</span><span class="line"></span></div>
+            </div>
+
+            <div class="contact-grid">
+                <div class="social-cards-column">
+                    <h3 class="royal-title mb-4 translate" data-ar="ذبذبات الأثير" data-en="Ethereal Frequencies">ذبذبات الأثير</h3>
+                    <a href="https://iwtsp.com/966538019130" target="_blank" class="social-portal-card glass-panel floating-card">
+                        <div class="portal-icon">💬</div>
+                        <div class="portal-info">
+                            <h4 class="translate" data-ar="واتساب" data-en="WhatsApp">واتساب</h4>
+                            <p class="translate" data-ar="لإرسال البرقيات السريعة عبر الأثير" data-en="For sending swift etheric telegrams">لإرسال البرقيات السريعة عبر الأثير</p>
+                        </div>
+                    </a>
+                    <a href="https://x.com/as_57ma?s=21" target="_blank" class="social-portal-card glass-panel floating-card">
+                        <div class="portal-icon">🐦</div>
+                        <div class="portal-info">
+                            <h4 class="translate" data-ar="تويتر (X)" data-en="Twitter (X)">تويتر (X)</h4>
+                            <p class="translate" data-ar="لاقتفاء أثر أحدث تعاويذي الرقمية" data-en="To track the echoes of my latest digital spells">لاقتفاء أثر أحدث تعاويذي الرقمية</p>
+                        </div>
+                    </a>
+                    <a href="#" target="_blank" class="social-portal-card glass-panel floating-card">
+                        <div class="portal-icon">📜</div>
+                        <div class="portal-info">
+                            <h4 class="translate" data-ar="السيرة الذاتية" data-en="Resume (CV)">السيرة الذاتية</h4>
+                            <p class="translate" data-ar="استخرج لفافة سجل مغامراتي وإنجازاتي" data-en="Unfurl the scroll of my quests and achievements">استخرج لفافة سجل مغامراتي وإنجازاتي</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="summoning-layout">
+                    <h3 class="royal-title mb-4 translate" data-ar="دائرة الاستدعاء" data-en="The Summoning Circle">دائرة الاستدعاء</h3>
+                    <div class="magic-circle-bg spin-slow">
+                        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="none" stroke="#D4AF37" stroke-width="2"/><polygon points="100,10 178,145 22,145" fill="none" stroke="#D4AF37" stroke-width="1.5"/><polygon points="100,190 178,55 22,55" fill="none" stroke="#D4AF37" stroke-width="1.5"/></svg>
+                    </div>
+                    
+                    <form id="summon-form" class="ornate-panel glass-panel" novalidate>
+                        <div class="panel-inner-border">
+                            <div class="input-group">
+                                <label class="translate" data-ar="اسمك الحقيقي (اسم المستدعي)" data-en="Your True Name (The Summoner)">اسمك الحقيقي (اسم المستدعي)</label>
+                                <input type="text" id="summoner-name" name="name" class="magic-input translate-placeholder" data-placeholder-ar="مثال: حكيم عابر لعوالم الويب" data-placeholder-en="e.g. A Sage of the Web Realms" placeholder="مثال: حكيم عابر لعوالم الويب" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="translate" data-ar="الختم السحري (البريد الإلكتروني)" data-en="Magical Seal (Email)">الختم السحري (البريد الإلكتروني)</label>
+                                <input type="email" id="summoner-email" name="email" class="magic-input translate-placeholder" data-placeholder-ar="name@domain.com" data-placeholder-en="name@domain.com" placeholder="name@domain.com" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="translate" data-ar="رسالتك / نص التعويذة" data-en="Your Message / Incantation">رسالتك / نص التعويذة</label>
+                                <textarea rows="3" id="summoner-msg" name="message" class="magic-input translate-placeholder" data-placeholder-ar="ما الذي تبتغيه من وراء هذا الاستدعاء؟" data-placeholder-en="What seek ye from this summoning?" placeholder="ما الذي تبتغيه من وراء هذا الاستدعاء؟" required></textarea>
+                            </div>
+                            <input type="hidden" name="_captcha" value="false">
+                            <button type="submit" id="summon-btn" class="magical-btn gold-glow full-width mt-2">
+                                <span class="translate" data-ar="إطلاق التعويذة" data-en="Cast the Spell">إطلاق التعويذة</span><span class="btn-sparkle">✨</span>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="summon-success" class="hidden">
+                        <div class="success-content glass-panel">
+                            <h3 class="translate" data-ar="✧ تمت طقوس الاستدعاء بنجاح ✧" data-en="✧ Summoning Ritual Successful ✧">✧ تمت طقوس الاستدعاء بنجاح ✧</h3>
+                            <p class="translate" data-ar="طارت رسالتك عبر الأثير وستصلني قريباً." data-en="Your message has flown across the ether and shall reach me shortly.">طارت رسالتك عبر الأثير وستصلني قريباً.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="project-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel tilt-element">
+            <button class="close-modal-btn">✖</button>
+            <div class="modal-inner border-dashed">
+                <h2 id="modal-project-title" class="royal-title">اسم المشروع</h2>
+                <div class="divider"><span class="line"></span><span class="star">⌛</span><span class="line"></span></div>
+                <h3 class="translate coming-soon-text" data-ar="في طور التكوين..." data-en="Brewing in the Cauldron...">في طور التكوين...</h3>
+                <p class="translate mt-2" data-ar="هذه التعويذة ما زالت قيد التحضير في معملي السحري، أرجو العودة لاحقاً لاكتشافها." data-en="This spell is currently brewing in my magical laboratory; please return later to uncover its mysteries.">هذه التعويذة ما زالت قيد التحضير في معملي السحري، أرجو العودة لاحقاً لاكتشافها.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="Asmaa.js"></script>
+</body>
+</html>
