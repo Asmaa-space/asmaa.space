@@ -201,28 +201,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       5. تأثير الآلة الكاتبة الأولي (تم الإصلاح لضمان عدم التكرار)
-       ========================================================================== */
-    const prologueTextElement = document.getElementById('prologue-text');
-    // نحدد النص الأصلي بناءً على اللغة المختارة حالياً عند تحميل الصفحة
-    let originalText = currentLang === 'ar' ? prologueTextElement.getAttribute('data-ar') : prologueTextElement.getAttribute('data-en');
-    
-    prologueTextElement.textContent = ''; // تفريغ العنصر تماماً قبل البدء
-    let charIndex = 0;
-    
-    function typeWriter() {
-        if (charIndex < originalText.length) {
-            prologueTextElement.textContent += originalText.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeWriter, 35);
-        }
-    }
+       5. تأثير الآلة الكاتبة الأولي (تم الإصلاح الجذري للتكرار)
+       ========================================================================== */
+    const prologueTextElement = document.getElementById('prologue-text');
+    let charIndex = 0;
+    let isTyping = true; // متغير للتحكم ومنع التداخل
 
-    // ملاحظة: تأكدي أن updateLanguage() لا تقوم بتغيير نص prologue-text أثناء عمل دالة الكتابة
-    updateLanguage(); 
-    
-    // تشغيل التأثير بعد ثانية واحدة من تحميل الصفحة
-    setTimeout(typeWriter, 1000);
+    function typeWriter() {
+        const text = currentLang === 'ar' ? 
+                     prologueTextElement.getAttribute('data-ar') : 
+                     prologueTextElement.getAttribute('data-en');
+
+        if (charIndex < text.length) {
+            prologueTextElement.textContent += text.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, 35);
+        } else {
+            isTyping = false; // انتهى التأثير
+        }
+    }
+
+    // تعديل بسيط على updateLanguage لمنعها من تخريب التأثير
+    const originalUpdateLanguage = updateLanguage;
+    updateLanguage = function() {
+        originalUpdateLanguage();
+        // إذا كان التأثير يعمل، نفرغ النص فوراً لكي لا يظهر النص كاملاً
+        if (isTyping) {
+            prologueTextElement.textContent = ''; 
+        }
+    };
+
+    updateLanguage(); // تهيئة اللغات
+    setTimeout(typeWriter, 1000); // بدء الكتابة
 
 
     /* ==========================================================================
