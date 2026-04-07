@@ -1,497 +1,363 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* ================= المتغيرات الأساسية ================= */
+:root {
+    --bg-gradient-1: #2a1b3d; --bg-gradient-2: #44318d; --bg-gradient-3: #a4b3b6;
+    --panel-bg: rgba(42, 27, 61, 0.65); --panel-border: rgba(212, 175, 55, 0.8); --panel-border-inner: rgba(212, 175, 55, 0.4);
+    --text-main: #fcfcfc; --text-muted: #dcdcdc; --text-gold: #FFD700;
+    --glow-color: rgba(212, 175, 55, 0.6); --magic-pink: #d83f87; --error-color: #ff4b2b;
+}
 
-    /* ================= 1. إعدادات شاشة الترحيب الدائمة والوضع الافتراضي ================= */
-    let currentLang = localStorage.getItem('asmaa_lang') || 'ar';
-    let isDayMode = localStorage.getItem('asmaa_theme') === 'day';
-    let isColorblind = localStorage.getItem('asmaa_colorblind') === 'true';
-    let isProMode = false; // يبدأ دائماً كإبداعي حتى يختار الزائر
+body.day-mode {
+    --bg-gradient-1: #fce4ec; --bg-gradient-2: #e1bee7; --bg-gradient-3: #bbdefb;
+    --panel-bg: rgba(255, 255, 255, 0.55); --panel-border: #d4af37; --panel-border-inner: #bcaaa4;
+    --text-main: #4a3b52; --text-muted: #6d597a; --text-gold: #b58900;
+    --glow-color: rgba(255, 182, 193, 0.8); --magic-pink: #ff80ab;
+}
 
-    const welcomeScreen = document.getElementById('welcome-screen');
-    const btnCreative = document.getElementById('btn-creative-mode');
-    const btnPro = document.getElementById('btn-pro-mode');
+/* ================= حل مشكلة عمى الألوان ================= */
+body.colorblind-mode #app-container, 
+body.colorblind-mode #magical-background, 
+body.colorblind-mode #control-panel, 
+body.colorblind-mode #scroll-tracker, 
+body.colorblind-mode .modal-content,
+body.colorblind-mode #welcome-screen {
+    filter: grayscale(100%) contrast(1.2) !important;
+}
 
-    if (isDayMode) document.body.classList.add('day-mode');
-    if (isColorblind) document.body.classList.add('colorblind-mode');
-    
-    // إظهار شاشة الترحيب دائماً
-    if (welcomeScreen) {
-        welcomeScreen.style.display = 'flex';
-        setTimeout(() => {
-            welcomeScreen.style.opacity = '1';
-            welcomeScreen.style.visibility = 'visible';
-        }, 50);
-    }
+body.colorblind-mode {
+    --bg-gradient-1: #222222 !important; --bg-gradient-2: #444444 !important; --bg-gradient-3: #666666 !important;
+    --panel-bg: rgba(255, 255, 255, 0.95) !important;
+    --panel-border: #000000 !important; --panel-border-inner: #555555 !important;
+    --text-main: #000000 !important; --text-muted: #333333 !important; --text-gold: #000000 !important;
+    --glow-color: rgba(0, 0, 0, 0.2) !important; --magic-pink: #000000 !important;
+}
 
-    if (btnCreative) {
-        btnCreative.addEventListener('click', () => {
-            isProMode = false;
-            document.body.classList.remove('professional-mode');
-            const proBtn = document.getElementById('pro-toggle');
-            if(proBtn) {
-                proBtn.querySelector('.icon').textContent = '💼';
-                proBtn.setAttribute('data-tooltip', 'الوضع الرسمي');
-            }
-            finalizeWelcome();
-        });
-    }
+body.colorblind-mode .royal-title, body.colorblind-mode .section-intro { color: #ffffff !important; text-shadow: 2px 2px 4px #000 !important; }
+body.colorblind-mode .glass-panel, body.colorblind-mode .glass-panel * { color: #000000 !important; text-shadow: none !important; border-color: #000000 !important; }
+body.colorblind-mode .magic-input, body.colorblind-mode .magical-btn { background: #ffffff !important; color: #000000 !important; border: 2px solid #000000 !important; }
+body.colorblind-mode .magical-btn:hover { background: #000000 !important; color: #ffffff !important; }
 
-    if (btnPro) {
-        btnPro.addEventListener('click', () => {
-            isProMode = true;
-            document.body.classList.add('professional-mode');
-            const proBtn = document.getElementById('pro-toggle');
-            if(proBtn) {
-                proBtn.querySelector('.icon').textContent = '✨';
-                proBtn.setAttribute('data-tooltip', 'الوضع السحري');
-            }
-            finalizeWelcome();
-        });
-    }
+/* ================= الإعدادات العامة ================= */
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+[dir="rtl"] body { font-family: 'Tajawal', 'Nunito', sans-serif; }
+[dir="ltr"] body { font-family: 'Nunito', sans-serif; }
+body { color: var(--text-main); background-color: var(--bg-gradient-1); transition: 1s ease; overflow-x: hidden; width: 100%; max-width: 100%; }
 
-    function finalizeWelcome() {
-        if (welcomeScreen) {
-            welcomeScreen.style.opacity = '0';
-            setTimeout(() => {
-                welcomeScreen.style.display = 'none';
-            }, 800);
-        }
-        
-        updateLanguage();
-        setTimeout(typeWriter, 500);
-        
-        if(!isProMode && typeof createParticle === 'function') {
-             for(let i=0; i<15; i++) createParticle(window.innerWidth/2, window.innerHeight/2);
-        }
-    }
+h1, h2, h3, .royal-title { font-family: 'Cinzel Decorative', 'Tajawal', serif; color: var(--text-gold); text-shadow: 0 0 10px var(--glow-color); }
 
-    /* ================= 2. محرك المؤشر السحري ================= */
-    const cursor = document.getElementById('magic-cursor');
-    const particlesContainer = document.getElementById('particles-container');
-    
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let cursorX = mouseX;
-    let cursorY = mouseY;
+/* ================= شاشة الترحيب الدائمة (Welcome Screen) ================= */
+#welcome-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+    z-index: 900000; /* أقل من المؤشر السحري لكي يظهر المؤشر فوقها */
+    display: none; 
+    justify-content: center; align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.welcome-content {
+    padding: 50px;
+    text-align: center;
+    max-width: 650px;
+    width: 90%;
+    display: flex; flex-direction: column; align-items: center;
+}
+.welcome-choices {
+    display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; justify-content: center; width: 100%;
+}
+.welcome-choices .magical-btn { width: 100%; max-width: 250px; cursor: pointer !important; }
+#btn-pro-mode:hover { background: #adb5bd !important; color: #130a1e !important; }
 
-    document.addEventListener('mousemove', (e) => {
-        if (isProMode) return; 
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (Math.random() > 0.6) createParticle(mouseX, mouseY);
-    });
+/* ================= المؤشر السحري المصلّح والمرتفع ================= */
+#magic-cursor { position: fixed; left: 0 !important; top: 0 !important; right: auto !important; bottom: auto !important; width: 30px; height: 30px; pointer-events: none; z-index: 999999; filter: drop-shadow(0 0 10px var(--glow-color)); direction: ltr !important; }
+#magic-cursor svg { width: 100%; height: 100%; display: block; }
+.particle { position: fixed; left: 0 !important; top: 0 !important; right: auto !important; bottom: auto !important; border-radius: 50%; background: radial-gradient(circle, #fff 0%, var(--text-gold) 100%); pointer-events: none; z-index: 999998; box-shadow: 0 0 8px var(--glow-color); direction: ltr !important; }
+.cursor-click-effect { position: fixed; border: 2px solid var(--text-gold); border-radius: 50%; pointer-events: none; z-index: 999997; transform: translate(-50%, -50%); animation: ripple 0.6s forwards; }
 
-    function createParticle(x, y) {
-        if(!particlesContainer) return;
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        const size = Math.random() * 6 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.transform = `translate3d(${x}px, ${y}px, 0)`; 
-        particlesContainer.appendChild(particle);
-        
-        let opacity = 1;
-        let posY = y;
-        let posX = x;
-        const speedY = Math.random() * 2 + 1;
-        const speedX = (Math.random() - 0.5) * 2;
-        
-        function animateParticle() {
-            opacity -= 0.02;
-            posY += speedY;
-            posX += speedX;
-            particle.style.opacity = opacity;
-            particle.style.transform = `translate3d(${posX}px, ${posY}px, 0) scale(${opacity})`;
-            
-            if (opacity > 0) requestAnimationFrame(animateParticle);
-            else particle.remove();
-        }
-        requestAnimationFrame(animateParticle);
-    }
+@keyframes ripple { 0% { width: 0; height: 0; opacity: 1; } 100% { width: 100px; height: 100px; opacity: 0; } }
 
-    function animateCursorLoop() {
-        if (isProMode) {
-            requestAnimationFrame(animateCursorLoop);
-            return;
-        }
-        const easing = 0.15;
-        cursorX += (mouseX - cursorX) * easing;
-        cursorY += (mouseY - cursorY) * easing;
-        
-        if (cursor) {
-            cursor.style.transform = `translate3d(calc(${cursorX}px - 50%), calc(${cursorY}px - 50%), 0)`;
-            
-            const dx = mouseX - cursorX;
-            const dy = mouseY - cursorY;
-            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-            const distance = Math.sqrt(dx*dx + dy*dy);
-            const svg = cursor.querySelector('svg');
-            
-            if(svg) {
-                if(distance > 5) {
-                    svg.style.transform = `rotate(${angle}deg) scale(${1 + distance/100})`;
-                    svg.style.transition = 'transform 0.1s linear';
-                } else {
-                    svg.style.transform = `rotate(0deg) scale(1)`;
-                    svg.style.transition = 'transform 0.5s ease-out';
-                }
-            }
-        }
-        requestAnimationFrame(animateCursorLoop);
-    }
-    animateCursorLoop();
+/* ================= أشرطة التتبع والتحكم ================= */
+#system-status-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--text-gold); box-shadow: 0 0 10px var(--glow-color); width: 0%; z-index: 99999; transition: width 0.1s ease-out; }
+#scroll-tracker { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 15px; padding: 10px; }
+[dir="rtl"] #scroll-tracker { right: 15px; } [dir="ltr"] #scroll-tracker { left: 15px; }
+.tracker-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--text-gold); transition: 0.3s; position: relative; }
+.tracker-dot.active { background: var(--text-gold); box-shadow: 0 0 10px var(--glow-color); transform: scale(1.3); }
+.tracker-dot::before { content: attr(data-tooltip); position: absolute; top: 50%; transform: translateY(-50%); background: var(--panel-bg); color: var(--text-main); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; white-space: nowrap; opacity: 0; transition: 0.3s; border: 1px solid var(--panel-border); pointer-events: none; }
+[dir="rtl"] .tracker-dot::before { right: 25px; } [dir="ltr"] .tracker-dot::before { left: 25px; }
+.tracker-dot:hover::before { opacity: 1; }
 
-    document.addEventListener('mousedown', (e) => {
-        if (isProMode) return; 
-        const ripple = document.createElement('div');
-        ripple.classList.add('cursor-click-effect');
-        ripple.style.left = '0'; ripple.style.top = '0';
-        ripple.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`;
-        document.body.appendChild(ripple);
-        for(let i=0; i<10; i++) createParticle(e.clientX, e.clientY);
-        setTimeout(() => ripple.remove(), 600);
-    });
+#back-to-top { position: fixed; bottom: 30px; z-index: 1000; display: none; width: 50px; height: 50px; border-radius: 50%; justify-content: center; align-items: center; text-decoration: none; }
+[dir="rtl"] #back-to-top { left: 30px; } [dir="ltr"] #back-to-top { right: 30px; }
 
-    const interactables = document.querySelectorAll('button, a, input, textarea, .tarot-card-container, .tracker-dot, .potion-card, .spell-chapter, .social-portal-card');
-    interactables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            if(isProMode || !cursor) return;
-            const svg = cursor.querySelector('svg');
-            if(svg) {
-                svg.style.fill = 'rgba(212, 175, 55, 0.5)';
-                svg.style.transform = 'scale(1.5)';
-            }
-        });
-        el.addEventListener('mouseleave', () => {
-            if(isProMode || !cursor) return;
-            const svg = cursor.querySelector('svg');
-            if(svg) {
-                svg.style.fill = '#FFF7D6';
-                svg.style.transform = 'scale(1)';
-            }
-        });
-    });
+#control-panel { position: fixed; top: 20px; z-index: 1001; display: flex; gap: 10px; }
+[dir="rtl"] #control-panel { right: 20px; } [dir="ltr"] #control-panel { left: 20px; }
+.control-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--panel-bg); border: 1px solid var(--panel-border); color: var(--text-gold); display: flex; justify-content: center; align-items: center; transition: 0.3s; position: relative; }
+.control-btn:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 0 15px var(--glow-color); }
+.control-btn::after { content: attr(data-tooltip); position: absolute; top: 110%; left: 50%; transform: translateX(-50%); background: var(--panel-bg); color: var(--text-main); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; white-space: nowrap; opacity: 0; transition: 0.3s; pointer-events: none; border: 1px solid var(--panel-border); }
+.control-btn:hover::after { opacity: 1; }
 
-    /* ================= 3. شريط التقدم وتتبع المسار ================= */
-    const statusBar = document.getElementById('system-status-bar');
-    const sections = document.querySelectorAll('.section');
-    const trackerDots = document.querySelectorAll('.tracker-dot');
-    const backToTopBtn = document.getElementById('back-to-top');
+/* ================= الخلفية ================= */
+#magical-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; pointer-events: none; }
+.gradient-layer { position: absolute; width: 100%; height: 100%; background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-gradient-3) 100%); background-size: 400% 400%; animation: gradientFlow 15s ease infinite; }
+@keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.floating-symbols { position: absolute; width: 100%; height: 100%; }
+.symbol { position: absolute; color: var(--text-gold); opacity: 0.2; animation: floatSymbol 10s infinite alternate ease-in-out; }
+.s1 { top: 10%; left: 20%; animation-delay: 0s; font-size: 1.5rem; } .s2 { top: 30%; right: 15%; animation-delay: 2s; } .s3 { bottom: 20%; left: 10%; animation-delay: 4s; } .s4 { bottom: 10%; right: 25%; animation-delay: 1s; } .s5 { top: 50%; left: 50%; animation-delay: 3s; font-size: 2rem; }
+@keyframes floatSymbol { 0% { transform: translateY(0) rotate(0deg) scale(0.8); } 100% { transform: translateY(-40px) rotate(45deg) scale(1.2); } }
+.magic-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: floatOrb 20s infinite alternate ease-in-out; pointer-events: none; }
+.orb-1 { width: 400px; height: 400px; background: var(--magic-pink); top: -100px; left: -100px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: #00f2fe; bottom: -150px; right: -150px; animation-delay: -5s; }
+body.day-mode .orb-1 { background: #ffd700; } body.day-mode .orb-2 { background: #ff80ab; }
+@keyframes floatOrb { 0% { transform: translate(0, 0); } 100% { transform: translate(100px, 100px); } }
 
-    window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
-        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        
-        if(statusBar) statusBar.style.width = `${(scrollY / docHeight) * 100}%`;
-        if(backToTopBtn) backToTopBtn.style.display = scrollY > 500 ? 'flex' : 'none';
+/* ================= الأقسام ================= */
+.section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 100px 5%; position: relative; z-index: 1; }
+.header-section { text-align: center; margin-bottom: 50px; display: flex; flex-direction: column; align-items: center; }
+.section-intro { max-width: 800px; margin: 0 auto; color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; }
+.glass-panel { background: var(--panel-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--panel-border); border-radius: 15px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); transition: all 0.4s ease; }
+.ornate-panel { max-width: 800px; margin: 0 auto; padding: 15px; }
+.panel-inner-border { border: 1px dashed var(--panel-border-inner); border-radius: 10px; padding: 40px; text-align: center; }
+.magical-crest { width: 120px; height: 120px; margin: 0 auto 20px; }
+.spin-slow { animation: spin 20s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
-        let current = '';
-        sections.forEach(section => {
-            if (scrollY >= (section.offsetTop - section.clientHeight / 3)) {
-                current = section.getAttribute('id');
-            }
-        });
+.magical-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 30px; background: transparent; border: 1px solid var(--text-gold); color: var(--text-gold); font-family: 'Tajawal', sans-serif; font-size: 1.1rem; text-decoration: none; border-radius: 30px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.magical-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent); transition: 0.5s; }
+.magical-btn:hover::before { left: 100%; }
+.magical-btn:hover { background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 20px var(--glow-color); transform: translateY(-2px); }
+.gold-glow { box-shadow: 0 0 25px var(--glow-color); }
+.w-100 { width: 100%; } .mt-2 { margin-top: 20px; } .mb-4 { margin-bottom: 40px; }
 
-        trackerDots.forEach(dot => {
-            dot.classList.remove('active');
-            if (dot.getAttribute('href').includes(current)) dot.classList.add('active');
-        });
-    });
+.divider { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px auto 25px auto; width: 100%; max-width: 300px; }
+.divider .line { height: 1px; flex-grow: 1; background: linear-gradient(90deg, transparent, var(--panel-border), transparent); }
+.divider .star { color: var(--text-gold); font-size: 1.2rem; }
 
-    /* ================= 4. النافذة المنبثقة للمشاريع (Modal) ================= */
-    const modal = document.getElementById('project-modal');
-    const closeModalBtn = document.querySelector('.close-modal-btn');
-    const modalTitle = document.getElementById('modal-project-title');
-    const modalDetails = document.getElementById('modal-project-details');
-    const modalDate = document.getElementById('modal-project-date');
-    const modalRole = document.getElementById('modal-project-role');
-    const modalDesc = document.getElementById('modal-project-desc');
-    const modalImage = document.getElementById('modal-project-image');
-    const modalComingSoon = document.getElementById('modal-coming-soon');
-    
-    document.querySelectorAll('.open-modal-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const isAr = document.documentElement.getAttribute('lang') === 'ar';
-            
-            let titleText;
-            if(isProMode && btn.hasAttribute(isAr ? 'data-pro-ar' : 'data-pro-en')) {
-                titleText = btn.getAttribute(isAr ? 'data-pro-ar' : 'data-pro-en');
-            } else {
-                titleText = btn.getAttribute(isAr ? 'data-project-ar' : 'data-project-en');
-            }
-            if(modalTitle) modalTitle.textContent = titleText;
-            
-            const imageSrc = btn.getAttribute('data-image');
-            
-            if (imageSrc && imageSrc !== "") {
-                if(modalDate) modalDate.textContent = btn.getAttribute(isAr ? 'data-date-ar' : 'data-date-en') || '';
-                if(modalRole) modalRole.textContent = btn.getAttribute(isAr ? 'data-role-ar' : 'data-role-en') || '';
-                if(modalDesc) modalDesc.textContent = btn.getAttribute(isAr ? 'data-desc-ar' : 'data-desc-en') || '';
-                if(modalImage) modalImage.src = imageSrc;
-                
-                if(modalDetails) modalDetails.style.display = 'block';
-                if(modalComingSoon) modalComingSoon.style.display = 'none';
-            } else {
-                if(modalDetails) modalDetails.style.display = 'none';
-                if(modalComingSoon) modalComingSoon.style.display = 'block';
-            }
+@keyframes magicalFloat { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
+.floating-card { animation: magicalFloat 6s ease-in-out infinite; }
+.floating-card:nth-child(even) { animation-delay: 1.5s; animation-duration: 7s; }
+.floating-card:nth-child(3n) { animation-delay: 0.5s; animation-duration: 5.5s; }
+.floating-slow { animation: magicalFloat 8s ease-in-out infinite; }
 
-            if(modal) {
-                modal.classList.add('active');
-                modal.classList.remove('hidden');
-            }
-            
-            const scrollBody = modal ? modal.querySelector('.modal-scrollable-body') : null;
-            if (scrollBody) scrollBody.scrollTop = 0;
-            
-            if(!isProMode) {
-                const rect = btn.getBoundingClientRect();
-                for(let i=0; i<20; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
-        });
-    });
+/* ================= المهارات ================= */
+.spellbook-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
+.spell-chapter { padding: 30px; text-align: center; }
+.spell-icon { font-size: 3.5rem; margin-bottom: 15px; text-shadow: 0 0 15px var(--glow-color); }
+.spell-subtitle { display: block; font-size: 0.9rem; color: var(--text-gold); font-family: sans-serif; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; }
+.spell-list { list-style: none; padding: 0; margin-top: 15px; text-align: right; }
+[dir="ltr"] .spell-list { text-align: left; }
+.spell-list li { position: relative; padding-right: 20px; margin-bottom: 12px; color: var(--text-muted); font-size: 1.05rem; }
+[dir="ltr"] .spell-list li { padding-right: 0; padding-left: 20px; }
+.spell-list li::before { content: '✦'; position: absolute; right: 0; top: 2px; color: var(--text-gold); font-size: 0.9rem; }
+[dir="ltr"] .spell-list li::before { right: auto; left: 0; }
+.highlight-chapter { border-color: var(--text-gold); box-shadow: 0 0 20px var(--glow-color); }
 
-    if (closeModalBtn && modal) {
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        });
-    }
+/* ================= الأدوات (الأيقونات الأصلية الجديدة) ================= */
+.potions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+.potion-card { padding: 25px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 2; }
+.potion-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: var(--text-gold); }
+.potion-desc { font-size: 0.85rem; line-height: 1.5; opacity: 0.85; }
+.potion-card:hover { border-color: var(--text-gold); }
 
-    /* ================= 5. نظام اللغات والتأثيرات ================= */
-    const langToggle = document.getElementById('lang-toggle');
-    const prologueTextElement = document.getElementById('prologue-text');
-    let typeWriterTimeout;
-    let isTyping = false;
+.potion-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    margin-bottom: 15px;
+}
+.real-tool-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
+}
+.potion-card:hover .real-tool-icon {
+    transform: scale(1.15) translateY(-5px);
+    filter: drop-shadow(0 10px 15px var(--glow-color));
+}
 
-    function updateLanguage() {
-        const isAr = currentLang === 'ar';
-        document.documentElement.setAttribute('lang', isAr ? 'ar' : 'en');
-        document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
-        if(langToggle) langToggle.querySelector('.icon').textContent = isAr ? 'EN' : 'ع';
-        
-        document.querySelectorAll('.translate').forEach(el => {
-            let newText;
-            if(isProMode && el.hasAttribute(isAr ? 'data-pro-ar' : 'data-pro-en')) {
-                newText = el.getAttribute(isAr ? 'data-pro-ar' : 'data-pro-en');
-            } else {
-                newText = el.getAttribute(isAr ? 'data-ar' : 'data-en');
-            }
-            if (newText && el.id !== 'prologue-text') {
-                el.textContent = newText;
-            }
-        });
+/* عكس الألوان للأيقونات السوداء في الوضع الليلي */
+body:not(.day-mode):not(.professional-mode) .invert-dark,
+body.professional-mode:not(.day-mode) .invert-dark {
+    filter: invert(1) brightness(1.5) drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
+body.day-mode .invert-dark,
+body.professional-mode.day-mode .invert-dark {
+    filter: invert(0);
+}
 
-        document.querySelectorAll('.translate-placeholder').forEach(el => {
-            let newText;
-            if(isProMode && el.hasAttribute(isAr ? 'data-pro-ar' : 'data-pro-en')) {
-                newText = el.getAttribute(isAr ? 'data-pro-ar' : 'data-pro-en');
-            } else {
-                newText = el.getAttribute(isAr ? 'data-placeholder-ar' : 'data-placeholder-en');
-            }
-            if(newText) el.placeholder = newText;
-        });
+body:not(.day-mode):not(.professional-mode) .invert-light-mode { fill: #ffffff !important; }
+body.day-mode:not(.professional-mode) .invert-light-mode { fill: #222 !important; }
+body.professional-mode:not(.day-mode) .invert-light-mode { fill: #f8f9fa !important; }
+body.professional-mode.day-mode .invert-light-mode { fill: #343a40 !important; }
 
-        document.querySelectorAll('.translate-list').forEach(ul => {
-            let itemsString;
-            if(isProMode && ul.hasAttribute(isAr ? 'data-pro-ar' : 'data-pro-en')) {
-                itemsString = ul.getAttribute(isAr ? 'data-pro-ar' : 'data-pro-en');
-            } else {
-                itemsString = ul.getAttribute(isAr ? 'data-ar' : 'data-en');
-            }
-            if(!itemsString) return;
-            const items = itemsString.split('|');
-            ul.innerHTML = '';
-            items.forEach(itemText => {
-                const li = document.createElement('li');
-                li.textContent = (isProMode ? '- ' : '✧ ') + itemText;
-                ul.appendChild(li);
-            });
-        });
+/* ================= المشاريع (Tarot) ================= */
+.tarot-deck { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 30px; }
+.tarot-card-container { width: 280px; height: 420px; perspective: 1000px; cursor: none; z-index: 5; }
+.tarot-card { width: 100%; height: 100%; transition: transform 0.6s ease; display: flex; align-items: center; justify-content: center; padding: 10px; }
+.tarot-border { border: 2px solid var(--panel-border-inner); width: 100%; height: 100%; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.tarot-icon { font-size: 3rem; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--glow-color)); }
+.tarot-name { font-size: 1.3rem; font-weight: bold; }
+.tarot-card-container:hover .tarot-card { transform: scale(1.05); border-color: var(--text-gold); box-shadow: 0 0 30px var(--glow-color); }
+.stars { color: var(--text-gold); letter-spacing: 5px; margin-top: 15px; font-size: 1.2rem; }
 
-        if (isTyping && prologueTextElement) {
-            prologueTextElement.textContent = ''; 
-        }
-    }
+/* ================= النافذة المنبثقة المحدثة ================= */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 100000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; padding: 20px; overflow: hidden; }
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal-content { max-width: 1000px; width: 100%; height: 90vh; background: var(--panel-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--panel-border); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: scale(0.9); transition: 0.3s; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+.modal-overlay.active .modal-content { transform: scale(1); }
 
-    if (langToggle) {
-        langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            localStorage.setItem('asmaa_lang', currentLang);
-            updateLanguage();
-            typeWriter();
-            if(!isProMode) {
-                const rect = langToggle.getBoundingClientRect();
-                for(let i=0; i<15; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
-        });
-    }
+.modal-header { padding: 20px 30px; border-bottom: 1px dashed var(--panel-border-inner); display: flex; justify-content: flex-start; background: rgba(0,0,0,0.3); }
 
-    function typeWriter() {
-        if(!prologueTextElement) return;
-        const isAr = currentLang === 'ar';
-        let text;
-        if(isProMode && prologueTextElement.hasAttribute(isAr ? 'data-pro-ar' : 'data-pro-en')) {
-            text = prologueTextElement.getAttribute(isAr ? 'data-pro-ar' : 'data-pro-en');
-        } else {
-            text = prologueTextElement.getAttribute(isAr ? 'data-ar' : 'data-en');
-        }
-        
-        if(!text) return;
-        prologueTextElement.innerHTML = '';
-        let i = 0;
-        clearTimeout(typeWriterTimeout);
-        isTyping = true;
-        
-        function type() {
-            if (i < text.length) {
-                prologueTextElement.innerHTML += text.charAt(i);
-                i++;
-                typeWriterTimeout = setTimeout(type, 30); 
-            } else {
-                isTyping = false;
-            }
-        }
-        type();
-    }
+.close-modal-btn { position: static; font-size: 1.1rem; padding: 8px 25px; border-radius: 50px; border: 1px solid var(--text-gold); color: var(--text-gold); background: transparent; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: none; }
+[dir="ltr"] .close-modal-btn .icon { transform: rotate(180deg); }
+.close-modal-btn:hover { background: var(--text-gold); color: #000; transform: translateY(-2px); box-shadow: 0 0 15px var(--glow-color); }
 
-    /* ================= 6. تبديل الوضع الاحترافي، الثيم، وعمى الألوان ================= */
-    const proToggleBtn = document.getElementById('pro-toggle');
-    if (proToggleBtn) {
-        proToggleBtn.addEventListener('click', () => {
-            isProMode = !isProMode;
-            if(isProMode) {
-                document.body.classList.add('professional-mode');
-                proToggleBtn.querySelector('.icon').textContent = '✨';
-                proToggleBtn.setAttribute('data-tooltip', 'الوضع السحري');
-            } else {
-                document.body.classList.remove('professional-mode');
-                proToggleBtn.querySelector('.icon').textContent = '💼';
-                proToggleBtn.setAttribute('data-tooltip', 'الوضع الرسمي');
-            }
-            
-            updateLanguage();
-            typeWriter();
-            
-            if(!isProMode) {
-                const rect = proToggleBtn.getBoundingClientRect();
-                for(let i=0; i<15; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
-        });
-    }
+.modal-scrollable-body { padding: 40px; overflow-y: auto; flex: 1; scrollbar-width: thin; scrollbar-color: var(--text-gold) transparent; }
+.modal-scrollable-body::-webkit-scrollbar { width: 8px; }
+.modal-scrollable-body::-webkit-scrollbar-thumb { background-color: var(--text-gold); border-radius: 10px; }
 
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('day-mode');
-            isDayMode = document.body.classList.contains('day-mode');
-            localStorage.setItem('asmaa_theme', isDayMode ? 'day' : 'night');
-            themeToggleBtn.querySelector('.icon').textContent = isDayMode ? '☀️' : '🌙';
-            if(!isProMode) {
-                const rect = themeToggleBtn.getBoundingClientRect();
-                for(let i=0; i<15; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
-        });
-    }
-    
-    const colorblindBtn = document.getElementById('colorblind-toggle');
-    if (colorblindBtn) {
-        colorblindBtn.addEventListener('click', () => {
-            document.body.classList.toggle('colorblind-mode');
-            isColorblind = document.body.classList.contains('colorblind-mode');
-            localStorage.setItem('asmaa_colorblind', isColorblind);
-            if(!isProMode) {
-                const rect = colorblindBtn.getBoundingClientRect();
-                for(let i=0; i<15; i++) createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
-        });
-    }
+.project-meta-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.meta-item { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--panel-border-inner); padding: 8px 20px; border-radius: 50px; color: var(--text-gold); font-size: 1rem; display: flex; align-items: center; gap: 10px; }
+.project-description { text-align: center; max-width: 800px; margin: 0 auto 40px auto; font-size: 1.15rem; line-height: 1.9; color: var(--text-muted); }
 
-    /* ================= 7. نموذج الاستدعاء المباشر ================= */
-    const summonForm = document.getElementById('summon-form');
-    const successMessage = document.getElementById('summon-success'); 
-    const summonBtn = document.getElementById('summon-btn');
+.project-full-image { width: 100%; height: auto; border-radius: 15px; border: 1px solid var(--panel-border-inner); box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 20px; display: block; }
+.coming-soon-text { color: var(--text-muted); font-style: italic; }
 
-    if (summonForm) {
-        summonForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            if (!summonForm.checkValidity()) {
-                summonForm.reportValidity();
-                return;
-            }
+/* ================= التواصل ================= */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1000px; margin: 0 auto; align-items: center; }
+.social-portals { display: flex; flex-direction: column; gap: 20px; }
+.social-portal-card { display: flex; align-items: center; gap: 20px; padding: 25px; text-decoration: none; color: var(--text-main); }
+.portal-icon { font-size: 2.5rem; transition: 0.3s; }
+.social-portal-card:hover .portal-icon { transform: scale(1.2); filter: drop-shadow(0 0 10px var(--glow-color)); }
+.portal-info h4 { color: var(--text-gold); font-size: 1.2rem; margin-bottom: 5px; }
+.portal-info p { color: var(--text-muted); font-size: 0.95rem; }
+.summon-section { padding: 40px; }
+.input-group { margin-bottom: 20px; }
+.magic-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border-inner); color: var(--text-main); padding: 15px; border-radius: 8px; font-family: inherit; font-size: 1rem; transition: 0.3s; position: relative; z-index: 10; }
+body.day-mode .magic-input { background: rgba(255,255,255,0.6); color: #000; }
+.magic-input:focus { outline: none; border-color: var(--text-gold); box-shadow: 0 0 20px var(--glow-color); background: rgba(0,0,0,0.5); }
 
-            const originalBtnText = summonBtn.innerHTML;
-            const isAr = document.documentElement.getAttribute('lang') === 'ar';
-            summonBtn.innerHTML = isAr ? '<span>جاري الإرسال...</span><span class="btn-sparkle">⏳</span>' : '<span>Sending...</span><span class="btn-sparkle">⏳</span>';
-            summonBtn.disabled = true;
+/* ================= التجاوب ================= */
+@media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+    .social-portal-card:hover { transform: translateY(-5px); }
+    [dir="ltr"] .social-portal-card:hover { transform: translateY(-5px); }
+}
+@media (max-width: 768px) {
+    .section { padding: 80px 15px; }
+    .royal-title { font-size: 1.5rem; }
+    .panel-inner-border { padding: 1.5rem 1rem; }
+    .typewriter-container { min-height: 100px; }
+    .spellbook-grid { grid-template-columns: 1fr; }
+    .potions-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .potion-card { padding: 15px 10px; }
+    .potion-icon { font-size: 2.2rem; }
+    .tarot-deck { gap: 20px; }
+    .tarot-card-container { width: 100%; max-width: 300px; height: 350px; }
+    #scroll-tracker { display: none; }
+    .modal-content { height: 95vh; }
+    .modal-scrollable-body { padding: 20px; }
+    .project-meta-container { flex-direction: column; align-items: center; gap: 10px; }
+}
+.hidden { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
-            const formData = {
-                name: document.getElementById('summoner-name').value,
-                email: document.getElementById('summoner-email').value,
-                message: document.getElementById('summoner-message').value, 
-                _captcha: "false"
-            };
+/* ================= الوضع الاحترافي للشركات (Professional Mode) ================= */
+body.professional-mode {
+    --bg-gradient-1: #1a1e23 !important; 
+    --bg-gradient-2: #222831 !important; 
+    --bg-gradient-3: #2c343f !important;
+    --panel-bg: rgba(33, 37, 41, 0.9) !important;
+    --panel-border: #495057 !important;
+    --panel-border-inner: #343a40 !important;
+    --text-main: #f8f9fa !important;
+    --text-muted: #adb5bd !important;
+    --text-gold: #66b2ff !important; 
+    --glow-color: rgba(0, 0, 0, 0.2) !important;
+    --magic-pink: #0056b3 !important;
+}
 
-            fetch("https://formsubmit.co/ajax/Asmaawork57@outlook.sa", {
-                method: "POST",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                summonForm.style.transition = 'all 0.5s ease';
-                summonForm.style.transform = 'scale(0.8)';
-                summonForm.style.opacity = '0';
-                
-                setTimeout(() => {
-                    summonForm.style.display = 'none';
-                    summonForm.classList.add('hidden');
-                    
-                    if(successMessage) {
-                        successMessage.style.display = 'block'; 
-                        successMessage.classList.remove('hidden');
-                        successMessage.classList.add('show');
-                        
-                        if(!isProMode) {
-                            const rect = successMessage.getBoundingClientRect();
-                            for(let i=0; i<30; i++) {
-                                setTimeout(() => {
-                                    createParticle(rect.left + rect.width/2 + (Math.random()*100-50), rect.top + rect.height/2 + (Math.random()*100-50));
-                                }, i * 50);
-                            }
-                        }
-                    }
-                }, 500);
+body.professional-mode.day-mode {
+    --bg-gradient-1: #f8f9fa !important;
+    --bg-gradient-2: #e9ecef !important;
+    --bg-gradient-3: #dee2e6 !important;
+    --panel-bg: #ffffff !important;
+    --panel-border: #ced4da !important;
+    --panel-border-inner: #e9ecef !important;
+    --text-main: #343a40 !important;
+    --text-muted: #6c757d !important;
+    --text-gold: #0056b3 !important; 
+    --glow-color: rgba(0, 0, 0, 0.05) !important;
+}
 
-                setTimeout(() => {
-                    summonForm.reset();
-                    if(successMessage) {
-                        successMessage.style.display = 'none';
-                        successMessage.classList.add('hidden');
-                        successMessage.classList.remove('show');
-                    }
-                    
-                    summonForm.style.display = 'block'; 
-                    summonForm.classList.remove('hidden');
-                    
-                    summonBtn.innerHTML = originalBtnText;
-                    summonBtn.disabled = false;
-                    
-                    requestAnimationFrame(() => {
-                        summonForm.style.transform = 'scale(1)';
-                        summonForm.style.opacity = '1';
-                    });
-                }, 6000);
-            })
-            .catch(error => {
-                alert(isAr ? 'تعثر الإرسال! تأكدي من الاتصال.' : 'Failed! Check your connection.');
-                summonBtn.innerHTML = originalBtnText;
-                summonBtn.disabled = false;
-            });
-        });
-    }
-});
+body.professional-mode * { cursor: auto !important; }
+body.professional-mode a, body.professional-mode button, body.professional-mode .open-modal-btn { cursor: pointer !important; }
+
+body.professional-mode #magic-cursor,
+body.professional-mode .particle,
+body.professional-mode .cursor-click-effect,
+body.professional-mode #magical-background,
+body.professional-mode .btn-sparkle {
+    display: none !important;
+}
+
+body.professional-mode h1, 
+body.professional-mode h2, 
+body.professional-mode h3, 
+body.professional-mode .royal-title {
+    font-family: 'Tajawal', 'Nunito', sans-serif !important;
+    text-shadow: none !important;
+    font-weight: 800 !important;
+}
+
+body.professional-mode .glass-panel {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 8px !important;
+    transform: none !important;
+}
+
+body.professional-mode .floating-card, 
+body.professional-mode .floating-slow,
+body.professional-mode .spin-slow {
+    animation: none !important;
+    transform: none !important;
+}
+
+body.professional-mode .magical-btn {
+    background: var(--text-gold) !important;
+    color: var(--bg-gradient-1) !important;
+    border-radius: 6px !important;
+    border: none !important;
+    box-shadow: 0 4px 6px var(--glow-color) !important;
+}
+body.professional-mode .magical-btn::before { display: none !important; }
+body.professional-mode .magical-btn:hover { opacity: 0.9 !important; transform: translateY(-2px) !important; }
+body.professional-mode .control-btn { border-radius: 6px !important; background: var(--panel-bg) !important; color: var(--text-gold) !important; border: 1px solid var(--panel-border) !important; }
+
+body.professional-mode .spell-icon,
+body.professional-mode .potion-icon,
+body.professional-mode .tarot-icon,
+body.professional-mode .portal-icon,
+body.professional-mode .s-icon,
+body.professional-mode .meta-icon {
+    filter: none !important;
+    text-shadow: none !important;
+}
+
+body.professional-mode .divider .star { display: none !important; }
+body.professional-mode .divider .line { background: #dee2e6 !important; height: 2px !important; }
+
+body.professional-mode .tracker-dot { border-color: #adb5bd !important; border-radius: 4px !important; }
+body.professional-mode .tracker-dot.active { background: var(--text-gold) !important; border-color: var(--text-gold) !important; border-radius: 4px !important; }
+body.professional-mode .tarot-border,
+body.professional-mode .panel-inner-border { border-style: solid !important; border-color: var(--panel-border) !important; border-radius: 6px !important; }
+
+body.professional-mode .magic-input {
+    background: var(--panel-bg) !important;
+    border: 1px solid var(--panel-border) !important;
+    color: var(--text-main) !important;
+    border-radius: 4px !important;
+}
+body.professional-mode .magic-input:focus { border-color: var(--text-gold) !important; box-shadow: 0 0 0 0.2rem var(--glow-color) !important; }
