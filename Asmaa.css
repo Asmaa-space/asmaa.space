@@ -32,7 +32,7 @@ body.day-mode {
     --magic-pink: #d9889a;
 }
 
-/* حل مشكلة عمى الألوان */
+/* حل مشكلة عمى الألوان (الوضع السحري) */
 body.colorblind-mode #app-container, 
 body.colorblind-mode #magical-background, 
 body.colorblind-mode #control-panel, 
@@ -79,7 +79,7 @@ body.day-mode .tarot-name {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-    z-index: 900000; /* أقل من المؤشر لكي يظهر المؤشر السحري فوقها */
+    z-index: 900000;
     display: none; 
     justify-content: center; align-items: center;
     transition: opacity 0.8s ease, visibility 0.8s ease;
@@ -307,25 +307,92 @@ body.day-mode .magic-input { background: rgba(255,255,255,0.9) !important; color
 }
 .hidden { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
-/* ================= الوضع الاحترافي للشركات (Professional Mode - ثابت ولن يتغير) ================= */
+/* ================= الوضع الاحترافي للشركات (الأساسي - الليلي) ================= */
 body.professional-mode {
     --bg-gradient-1: #1a1e23 !important; 
     --bg-gradient-2: #222831 !important; 
     --bg-gradient-3: #2c343f !important;
-    --panel-bg: rgba(33, 37, 41, 0.9) !important;
+    --panel-bg: rgba(33, 37, 41, 0.95) !important;
     --panel-border: #495057 !important;
     --panel-border-inner: #343a40 !important;
     --text-main: #f8f9fa !important;
     --text-muted: #adb5bd !important;
-    --text-gold: #66b2ff !important; 
+    --text-gold: #66b2ff !important; /* أزرق مؤسسي */
     --glow-color: rgba(0, 0, 0, 0.2) !important;
     --magic-pink: #0056b3 !important;
 }
 
+/* ================= الوضع الاحترافي (النهاري - Light Mode) ================= */
+body.professional-mode.day-mode {
+    --bg-gradient-1: #f4f6f9 !important; 
+    --bg-gradient-2: #e9ecef !important; 
+    --bg-gradient-3: #ffffff !important;
+    --panel-bg: rgba(255, 255, 255, 0.98) !important;
+    --panel-border: #ced4da !important;
+    --panel-border-inner: #dee2e6 !important;
+    --text-main: #212529 !important;
+    --text-muted: #495057 !important;
+    --text-gold: #0056b3 !important; /* أزرق داكن رسمي */
+    --glow-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ================= الوضع الاحترافي (التباين العالي / عمى الألوان) ================= */
+/* 1. التباين العالي في الوضع الليلي */
+body.professional-mode.colorblind-mode {
+    --bg-gradient-1: #000000 !important; 
+    --bg-gradient-2: #000000 !important; 
+    --bg-gradient-3: #000000 !important;
+    --panel-bg: #000000 !important;
+    --panel-border: #ffffff !important;
+    --panel-border-inner: #cccccc !important;
+    --text-main: #ffffff !important;
+    --text-muted: #dddddd !important;
+    --text-gold: #ffff00 !important; /* أصفر فاقع للتباين العالي */
+    --glow-color: transparent !important;
+}
+
+/* 2. التباين العالي في الوضع النهاري */
+body.professional-mode.day-mode.colorblind-mode {
+    --bg-gradient-1: #ffffff !important; 
+    --bg-gradient-2: #ffffff !important; 
+    --bg-gradient-3: #ffffff !important;
+    --panel-bg: #ffffff !important;
+    --panel-border: #000000 !important;
+    --panel-border-inner: #333333 !important;
+    --text-main: #000000 !important;
+    --text-muted: #222222 !important;
+    --text-gold: #0000ff !important; /* أزرق فاقع صريح */
+}
+
+/* 3. إلغاء الشفافية والظلال في وضع التباين لتسهيل القراءة */
+body.professional-mode.colorblind-mode .glass-panel,
+body.professional-mode.colorblind-mode .modal-content {
+    background: var(--panel-bg) !important;
+    border: 2px solid var(--panel-border) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body.professional-mode.colorblind-mode .magical-btn,
+body.professional-mode.colorblind-mode .control-btn,
+body.professional-mode.colorblind-mode .magic-input {
+    background: var(--panel-bg) !important;
+    color: var(--text-main) !important;
+    border: 2px solid var(--text-gold) !important;
+}
+
+body.professional-mode.colorblind-mode .magical-btn:hover,
+body.professional-mode.colorblind-mode .control-btn:hover {
+    background: var(--text-gold) !important;
+    color: var(--panel-bg) !important;
+}
+
+
+/* ================= تعطيل التأثيرات السحرية في الوضع الرسمي ================= */
 body.professional-mode * { cursor: auto !important; }
 body.professional-mode a, body.professional-mode button, body.professional-mode .open-modal-btn { cursor: pointer !important; }
 
-/* إخفاء السحر بالكامل في الوضع الاحترافي */
 body.professional-mode #magic-cursor,
 body.professional-mode .particle,
 body.professional-mode .cursor-click-effect,
@@ -367,7 +434,13 @@ body.professional-mode .magical-btn {
 }
 body.professional-mode .magical-btn::before { display: none !important; }
 body.professional-mode .magical-btn:hover { opacity: 0.9 !important; transform: translateY(-2px) !important; }
-body.professional-mode .control-btn { border-radius: 6px !important; background: var(--panel-bg) !important; color: var(--text-gold) !important; border: 1px solid var(--panel-border) !important; }
+
+body.professional-mode .control-btn { 
+    border-radius: 6px !important; 
+    background: var(--panel-bg) !important; 
+    color: var(--text-gold) !important; 
+    border: 1px solid var(--panel-border) !important; 
+}
 
 body.professional-mode .spell-icon,
 body.professional-mode .potion-icon,
@@ -381,9 +454,11 @@ body.professional-mode .meta-icon {
 
 body.professional-mode .divider .star { display: none !important; }
 body.professional-mode .divider .line { background: #dee2e6 !important; height: 2px !important; }
+body.professional-mode.day-mode .divider .line { background: #adb5bd !important; }
 
 body.professional-mode .tracker-dot { border-color: #adb5bd !important; border-radius: 4px !important; }
 body.professional-mode .tracker-dot.active { background: var(--text-gold) !important; border-color: var(--text-gold) !important; border-radius: 4px !important; }
+
 body.professional-mode .tarot-border,
 body.professional-mode .panel-inner-border { border-style: solid !important; border-color: var(--panel-border) !important; border-radius: 6px !important; }
 
@@ -399,17 +474,45 @@ body.professional-mode .magic-input:focus { border-color: var(--text-gold) !impo
 #summon-form {
     display: flex;
     flex-direction: column;
-    align-items: center; /* يجبر كل شيء داخله على التوسيط */
+    align-items: center; 
     width: 100%;
 }
 
 #summon-form .input-group {
-    width: 100%; /* يضمن أن الحقول تأخذ العرض الكامل */
+    width: 100%; 
 }
 
 #summon-btn {
-    margin: 20px auto 0 auto !important; /* يوسط الزر هندسياً */
+    margin: 20px auto 0 auto !important; 
     width: auto !important; 
-    min-width: 250px; /* يعطيه عرض أنيق ومتناسق */
+    min-width: 250px; 
     justify-content: center;
+}/* ================= إصلاح اختفاء النصوص في وضع تباين الشركات ================= */
+body.professional-mode.colorblind-mode .glass-panel,
+body.professional-mode.colorblind-mode .glass-panel *,
+body.professional-mode.colorblind-mode h1,
+body.professional-mode.colorblind-mode h2,
+body.professional-mode.colorblind-mode h3,
+body.professional-mode.colorblind-mode p,
+body.professional-mode.colorblind-mode span,
+body.professional-mode.colorblind-mode .section-intro {
+    color: var(--text-main) !important;
+}
+
+/* إصلاح لون الأزرار والعناوين البارزة */
+body.professional-mode.colorblind-mode .royal-title {
+    color: var(--text-gold) !important;
+}
+
+body.professional-mode.colorblind-mode .magical-btn,
+body.professional-mode.colorblind-mode .control-btn {
+    color: var(--text-main) !important;
+    border-color: var(--text-main) !important;
+    background: transparent !important;
+}
+
+body.professional-mode.colorblind-mode .magical-btn:hover,
+body.professional-mode.colorblind-mode .control-btn:hover {
+    background: var(--text-main) !important;
+    color: var(--panel-bg) !important;
 }
