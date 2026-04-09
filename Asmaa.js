@@ -1,8 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    /* ================= 0. محرك السلسلة الموسيقية (Ghibli Warm Harp/Celesta) ================= */
+    let audioCtx;
+    let isSoundEnabled = true;
+    let noteIndex = 0; // مؤشر السلسلة الموسيقية
+    let bgMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/05/16/audio_b2f90956b6.mp3');
+    bgMusic.loop = true;
+    bgMusic.volume = 0.15; // موسيقى خلفية هادئة
+
+    function initAudio() {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (isSoundEnabled && !isProMode) {
+            bgMusic.play().catch(e => console.log("Waiting for user interaction to play audio"));
+        }
+    }
+
+    // سلسلة موسيقية دافئة جداً (سلم خماسي مريح للأذن)
+    const musicalChain = [
+        349.23, // F4 (دافئ)
+        392.00, // G4
+        440.00, // A4
+        523.25, // C5
+        587.33, // D5
+        659.25, // E5
+        783.99, // G5
+        880.00  // A5 (أعلى نغمة، ولن تكون مزعجة)
+    ];
+
+    // تعويذة عزف السلسلة (صوت دافئ وناعم جداً)
+    function playChainNote() {
+        if (!isSoundEnabled || !audioCtx || isProMode) return;
+        
+        const freq = musicalChain[noteIndex % musicalChain.length];
+        noteIndex++; 
+
+        // مستوى صوت منخفض جداً (كالهمس)
+        const masterGain = audioCtx.createGain();
+        masterGain.gain.value = 0.025; 
+        masterGain.connect(audioCtx.destination);
+
+        // فلتر "قطني" لامتصاص أي حدة في الصوت (يكتم الترددات المزعجة)
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = freq * 1.5; // يمرر فقط الدفء
+        filter.connect(masterGain);
+
+        // الموجة الأساسية (صوت بيانو/هارب دافئ)
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        const gainNode = audioCtx.createGain();
+        
+        // غلاف الصوت: يبدأ بنعومة شديدة ويتلاشى ببطء
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.04); // دخول ناعم جداً
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0); // تلاشي طويل ومريح
+
+        osc.connect(gainNode);
+        gainNode.connect(filter);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 2.1);
+    }
+
     /* ================= 1. إعدادات شاشة الترحيب الدائمة والوضع الافتراضي ================= */
     let currentLang = localStorage.getItem('asmaa_lang') || 'ar';
-    let isDayMode = false; // 💡 تم التعديل: يبدأ دائماً بالوضع الليلي افتراضياً
+    let isDayMode = false;
     let isColorblind = localStorage.getItem('asmaa_colorblind') === 'true';
     let isProMode = false; 
 
@@ -39,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 proBtn.querySelector('.icon').textContent = '💼';
                 proBtn.setAttribute('data-tooltip', 'الوضع الرسمي');
             }
+            initAudio(); // تهيئة وتشغيل الصوت
             finalizeWelcome();
         });
     }
@@ -72,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* ================= 2. محرك المؤشر السحري ================= */
+    /* ================= 2. محرك المؤشر السحري والتفاعلات ================= */
     const cursor = document.getElementById('magic-cursor');
     const particlesContainer = document.getElementById('particles-container');
     
@@ -149,8 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateCursorLoop();
 
+    // تشغيل نغمة عند النقر
     document.addEventListener('mousedown', (e) => {
+        if (!isProMode) playChainNote();
         if (isProMode) return; 
+        
         const ripple = document.createElement('div');
         ripple.classList.add('cursor-click-effect');
         ripple.style.left = '0'; ripple.style.top = '0';
@@ -160,16 +232,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => ripple.remove(), 600);
     });
 
+    // تشغيل السلسلة الموسيقية عند التمرير
     const interactables = document.querySelectorAll('button, a, input, textarea, .tarot-card-container, .tracker-dot, .potion-card, .spell-chapter, .social-portal-card');
     interactables.forEach(el => {
         el.addEventListener('mouseenter', () => {
-            if(isProMode || !cursor) return;
-            const svg = cursor.querySelector('svg');
-            if(svg) {
-                svg.style.fill = 'rgba(212, 175, 55, 0.5)';
-                svg.style.transform = 'scale(1.5)';
+            if(!isProMode) playChainNote(); // يعزف النغمة الناعمة من السلسلة
+
+            if(cursor && !isProMode) {
+                const svg = cursor.querySelector('svg');
+                if(svg) {
+                    svg.style.fill = 'rgba(212, 175, 55, 0.5)';
+                    svg.style.transform = 'scale(1.5)';
+                }
             }
         });
+        
         el.addEventListener('mouseleave', () => {
             if(isProMode || !cursor) return;
             const svg = cursor.querySelector('svg');
@@ -363,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         type();
     }
 
-    /* ================= 6. تبديل الوضع الاحترافي، الثيم، وعمى الألوان ================= */
+    /* ================= 6. تبديل الوضع الاحترافي، الثيم، وعمى الألوان والصوت ================= */
     const proToggleBtn = document.getElementById('pro-toggle');
     if (proToggleBtn) {
         proToggleBtn.addEventListener('click', () => {
@@ -372,10 +449,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.classList.add('professional-mode');
                 proToggleBtn.querySelector('.icon').textContent = '✨';
                 proToggleBtn.setAttribute('data-tooltip', 'الوضع السحري');
+                bgMusic.pause(); 
             } else {
                 document.body.classList.remove('professional-mode');
                 proToggleBtn.querySelector('.icon').textContent = '💼';
                 proToggleBtn.setAttribute('data-tooltip', 'الوضع الرسمي');
+                if(isSoundEnabled) bgMusic.play(); 
             }
             
             updateLanguage();
@@ -414,6 +493,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const soundToggleBtn = document.getElementById('sound-toggle');
+    if (soundToggleBtn) {
+        soundToggleBtn.addEventListener('click', () => {
+            isSoundEnabled = !isSoundEnabled;
+            if (isSoundEnabled) {
+                initAudio();
+                soundToggleBtn.querySelector('.icon').textContent = '🔊';
+                soundToggleBtn.setAttribute('data-tooltip', 'إيقاف الموسيقى');
+            } else {
+                bgMusic.pause();
+                soundToggleBtn.querySelector('.icon').textContent = '🔇';
+                soundToggleBtn.setAttribute('data-tooltip', 'تشغيل الموسيقى');
+            }
+        });
+    }
+
     /* ================= 7. نموذج الاستدعاء المباشر ================= */
     const summonForm = document.getElementById('summon-form');
     const successMessage = document.getElementById('summon-success'); 
@@ -440,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 _captcha: "false"
             };
 
-            fetch("https://formsubmit.co/ajax/Asmaawork57@outlook.sa", {
+            fetch("https://formsubmit.co/ajax/asmaawork57@outlook.sa", {
                 method: "POST",
                 headers: { 
                     'Content-Type': 'application/json',
