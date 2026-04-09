@@ -1,19 +1,38 @@
-/* ================= المتغيرات الأساسية ================= */
+/* ================= المتغيرات الأساسية (الوضع السحري الليلي - الافتراضي) ================= */
 :root {
-    --bg-gradient-1: #2a1b3d; --bg-gradient-2: #44318d; --bg-gradient-3: #a4b3b6;
-    --panel-bg: rgba(42, 27, 61, 0.65); --panel-border: rgba(212, 175, 55, 0.8); --panel-border-inner: rgba(212, 175, 55, 0.4);
-    --text-main: #fcfcfc; --text-muted: #dcdcdc; --text-gold: #FFD700;
-    --glow-color: rgba(212, 175, 55, 0.6); --magic-pink: #d83f87; --error-color: #ff4b2b;
+    --bg-gradient-1: #2a1b3d; 
+    --bg-gradient-2: #44318d; 
+    --bg-gradient-3: #a4b3b6;
+    --panel-bg: rgba(42, 27, 61, 0.65); 
+    --panel-border: rgba(212, 175, 55, 0.8); 
+    --panel-border-inner: rgba(212, 175, 55, 0.4);
+    --text-main: #fcfcfc; 
+    --text-muted: #dcdcdc; 
+    --text-gold: #FFD700;
+    --glow-color: rgba(212, 175, 55, 0.6); 
+    --magic-pink: #d83f87; 
+    --error-color: #ff4b2b;
 }
 
+/* ================= الوضع النهاري السحري (مريح للعين وتباين عالي) ================= */
 body.day-mode {
-    --bg-gradient-1: #fce4ec; --bg-gradient-2: #e1bee7; --bg-gradient-3: #bbdefb;
-    --panel-bg: rgba(255, 255, 255, 0.55); --panel-border: #d4af37; --panel-border-inner: #bcaaa4;
-    --text-main: #4a3b52; --text-muted: #6d597a; --text-gold: #b58900;
-    --glow-color: rgba(255, 182, 193, 0.8); --magic-pink: #ff80ab;
+    --bg-gradient-1: #fdfbf7; 
+    --bg-gradient-2: #f4edf3; 
+    --bg-gradient-3: #eef2f5; 
+    
+    --panel-bg: rgba(255, 255, 255, 0.7); 
+    --panel-border: rgba(184, 134, 11, 0.6); 
+    --panel-border-inner: rgba(184, 134, 11, 0.25);
+    
+    --text-main: #2b2033; 
+    --text-muted: #5c4e66; 
+    --text-gold: #b37700; 
+    
+    --glow-color: rgba(138, 92, 0, 0.35); 
+    --magic-pink: #d9889a;
 }
 
-/* ================= حل مشكلة عمى الألوان ================= */
+/* حل مشكلة عمى الألوان */
 body.colorblind-mode #app-container, 
 body.colorblind-mode #magical-background, 
 body.colorblind-mode #control-panel, 
@@ -34,7 +53,6 @@ body.colorblind-mode {
 body.colorblind-mode .royal-title, body.colorblind-mode .section-intro { color: #ffffff !important; text-shadow: 2px 2px 4px #000 !important; }
 body.colorblind-mode .glass-panel, body.colorblind-mode .glass-panel * { color: #000000 !important; text-shadow: none !important; border-color: #000000 !important; }
 body.colorblind-mode .magic-input, body.colorblind-mode .magical-btn { background: #ffffff !important; color: #000000 !important; border: 2px solid #000000 !important; }
-body.colorblind-mode .magical-btn:hover { background: #000000 !important; color: #ffffff !important; }
 
 /* ================= الإعدادات العامة ================= */
 * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
@@ -45,12 +63,23 @@ body { color: var(--text-main); background-color: var(--bg-gradient-1); transiti
 
 h1, h2, h3, .royal-title { font-family: 'Cinzel Decorative', 'Tajawal', serif; color: var(--text-gold); text-shadow: 0 0 10px var(--glow-color); }
 
-/* ================= شاشة الترحيب الدائمة (Welcome Screen) ================= */
+/* إزالة التوهجات من النصوص في الوضع النهاري */
+body.day-mode h1, 
+body.day-mode h2, 
+body.day-mode h3, 
+body.day-mode .royal-title,
+body.day-mode .potion-name,
+body.day-mode .tarot-name {
+    text-shadow: none !important;
+    font-weight: 800 !important;
+}
+
+/* ================= شاشة الترحيب ================= */
 #welcome-screen {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-    z-index: 99999999;
+    z-index: 900000; /* أقل من المؤشر لكي يظهر المؤشر السحري فوقها */
     display: none; 
     justify-content: center; align-items: center;
     transition: opacity 0.8s ease, visibility 0.8s ease;
@@ -107,7 +136,8 @@ h1, h2, h3, .royal-title { font-family: 'Cinzel Decorative', 'Tajawal', serif; c
 .magic-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: floatOrb 20s infinite alternate ease-in-out; pointer-events: none; }
 .orb-1 { width: 400px; height: 400px; background: var(--magic-pink); top: -100px; left: -100px; animation-delay: 0s; }
 .orb-2 { width: 500px; height: 500px; background: #00f2fe; bottom: -150px; right: -150px; animation-delay: -5s; }
-body.day-mode .orb-1 { background: #ffd700; } body.day-mode .orb-2 { background: #ff80ab; }
+body.day-mode .orb-1 { background: var(--text-gold); opacity: 0.15; } 
+body.day-mode .orb-2 { background: var(--magic-pink); opacity: 0.15; }
 @keyframes floatOrb { 0% { transform: translate(0, 0); } 100% { transform: translate(100px, 100px); } }
 
 /* ================= الأقسام ================= */
@@ -126,7 +156,6 @@ body.day-mode .orb-1 { background: #ffd700; } body.day-mode .orb-2 { background:
 .magical-btn:hover::before { left: 100%; }
 .magical-btn:hover { background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 20px var(--glow-color); transform: translateY(-2px); }
 .gold-glow { box-shadow: 0 0 25px var(--glow-color); }
-.w-100 { width: 100%; } .mt-2 { margin-top: 20px; } .mb-4 { margin-bottom: 40px; }
 
 .divider { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px auto 25px auto; width: 100%; max-width: 300px; }
 .divider .line { height: 1px; flex-grow: 1; background: linear-gradient(90deg, transparent, var(--panel-border), transparent); }
@@ -151,7 +180,7 @@ body.day-mode .orb-1 { background: #ffd700; } body.day-mode .orb-2 { background:
 [dir="ltr"] .spell-list li::before { right: auto; left: 0; }
 .highlight-chapter { border-color: var(--text-gold); box-shadow: 0 0 20px var(--glow-color); }
 
-/* ================= الأدوات (الأيقونات الأصلية الجديدة) ================= */
+/* ================= الأدوات ================= */
 .potions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
 .potion-card { padding: 25px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 2; }
 .potion-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: var(--text-gold); }
@@ -176,7 +205,7 @@ body.day-mode .orb-1 { background: #ffd700; } body.day-mode .orb-2 { background:
     filter: drop-shadow(0 10px 15px var(--glow-color));
 }
 
-/* عكس الألوان للأيقونات السوداء في الوضع الليلي */
+/* عكس الألوان للأيقونات السوداء */
 body:not(.day-mode):not(.professional-mode) .invert-dark,
 body.professional-mode:not(.day-mode) .invert-dark {
     filter: invert(1) brightness(1.5) drop-shadow(0 0 5px rgba(255,255,255,0.2));
@@ -185,9 +214,8 @@ body.day-mode .invert-dark,
 body.professional-mode.day-mode .invert-dark {
     filter: invert(0);
 }
-
 body:not(.day-mode):not(.professional-mode) .invert-light-mode { fill: #ffffff !important; }
-body.day-mode:not(.professional-mode) .invert-light-mode { fill: #222 !important; }
+body.day-mode:not(.professional-mode) .invert-light-mode { fill: #2b2033 !important; }
 body.professional-mode:not(.day-mode) .invert-light-mode { fill: #f8f9fa !important; }
 body.professional-mode.day-mode .invert-light-mode { fill: #343a40 !important; }
 
@@ -211,7 +239,7 @@ body.professional-mode.day-mode .invert-light-mode { fill: #343a40 !important; }
 
 .close-modal-btn { position: static; font-size: 1.1rem; padding: 8px 25px; border-radius: 50px; border: 1px solid var(--text-gold); color: var(--text-gold); background: transparent; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: none; }
 [dir="ltr"] .close-modal-btn .icon { transform: rotate(180deg); }
-.close-modal-btn:hover { background: var(--text-gold); color: #000; transform: translateY(-2px); box-shadow: 0 0 15px var(--glow-color); }
+.close-modal-btn:hover { background: var(--text-gold); color: var(--bg-gradient-1); transform: translateY(-2px); box-shadow: 0 0 15px var(--glow-color); }
 
 .modal-scrollable-body { padding: 40px; overflow-y: auto; flex: 1; scrollbar-width: thin; scrollbar-color: var(--text-gold) transparent; }
 .modal-scrollable-body::-webkit-scrollbar { width: 8px; }
@@ -224,6 +252,23 @@ body.professional-mode.day-mode .invert-light-mode { fill: #343a40 !important; }
 .project-full-image { width: 100%; height: auto; border-radius: 15px; border: 1px solid var(--panel-border-inner); box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 20px; display: block; }
 .coming-soon-text { color: var(--text-muted); font-style: italic; }
 
+/* إصلاح التباين للنافذة في الوضع النهاري */
+body.day-mode .modal-content {
+    background: rgba(255, 255, 255, 0.98) !important; 
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15) !important;
+}
+body.day-mode .modal-header {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+body.day-mode .meta-item {
+    background: rgba(128, 91, 0, 0.08) !important;
+    color: #805b00 !important;
+    border-color: rgba(128, 91, 0, 0.2) !important;
+    font-weight: 700 !important;
+}
+body.day-mode .project-description { color: #333333 !important; font-weight: 500 !important; }
+
 /* ================= التواصل ================= */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1000px; margin: 0 auto; align-items: center; }
 .social-portals { display: flex; flex-direction: column; gap: 20px; }
@@ -235,7 +280,7 @@ body.professional-mode.day-mode .invert-light-mode { fill: #343a40 !important; }
 .summon-section { padding: 40px; }
 .input-group { margin-bottom: 20px; }
 .magic-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border-inner); color: var(--text-main); padding: 15px; border-radius: 8px; font-family: inherit; font-size: 1rem; transition: 0.3s; position: relative; z-index: 10; }
-body.day-mode .magic-input { background: rgba(255,255,255,0.6); color: #000; }
+body.day-mode .magic-input { background: rgba(255,255,255,0.9) !important; color: #1a1a1a !important; border: 1px solid rgba(138, 102, 0, 0.3) !important; }
 .magic-input:focus { outline: none; border-color: var(--text-gold); box-shadow: 0 0 20px var(--glow-color); background: rgba(0,0,0,0.5); }
 
 /* ================= التجاوب ================= */
@@ -262,7 +307,7 @@ body.day-mode .magic-input { background: rgba(255,255,255,0.6); color: #000; }
 }
 .hidden { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
-/* ================= الوضع الاحترافي للشركات (Professional Mode) ================= */
+/* ================= الوضع الاحترافي للشركات (Professional Mode - ثابت ولن يتغير) ================= */
 body.professional-mode {
     --bg-gradient-1: #1a1e23 !important; 
     --bg-gradient-2: #222831 !important; 
@@ -277,22 +322,10 @@ body.professional-mode {
     --magic-pink: #0056b3 !important;
 }
 
-body.professional-mode.day-mode {
-    --bg-gradient-1: #f8f9fa !important;
-    --bg-gradient-2: #e9ecef !important;
-    --bg-gradient-3: #dee2e6 !important;
-    --panel-bg: #ffffff !important;
-    --panel-border: #ced4da !important;
-    --panel-border-inner: #e9ecef !important;
-    --text-main: #343a40 !important;
-    --text-muted: #6c757d !important;
-    --text-gold: #0056b3 !important; 
-    --glow-color: rgba(0, 0, 0, 0.05) !important;
-}
-
 body.professional-mode * { cursor: auto !important; }
 body.professional-mode a, body.professional-mode button, body.professional-mode .open-modal-btn { cursor: pointer !important; }
 
+/* إخفاء السحر بالكامل في الوضع الاحترافي */
 body.professional-mode #magic-cursor,
 body.professional-mode .particle,
 body.professional-mode .cursor-click-effect,
@@ -361,3 +394,21 @@ body.professional-mode .magic-input {
     border-radius: 4px !important;
 }
 body.professional-mode .magic-input:focus { border-color: var(--text-gold) !important; box-shadow: 0 0 0 0.2rem var(--glow-color) !important; }
+/* ================= إصلاح توسيط زر إرسال الرسالة ================= */
+#summon-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* يجبر كل شيء داخله على التوسيط */
+    width: 100%;
+}
+
+#summon-form .input-group {
+    width: 100%; /* يضمن أن الحقول تأخذ العرض الكامل */
+}
+
+#summon-btn {
+    margin: 20px auto 0 auto !important; /* يوسط الزر هندسياً */
+    width: auto !important; 
+    min-width: 250px; /* يعطيه عرض أنيق ومتناسق */
+    justify-content: center;
+}
