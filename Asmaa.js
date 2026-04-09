@@ -2,15 +2,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ================= 1. إعدادات شاشة الترحيب الدائمة والوضع الافتراضي ================= */
     let currentLang = localStorage.getItem('asmaa_lang') || 'ar';
-    let isDayMode = localStorage.getItem('asmaa_theme') === 'day';
+    let isDayMode = false; // 💡 تم التعديل: يبدأ دائماً بالوضع الليلي افتراضياً
     let isColorblind = localStorage.getItem('asmaa_colorblind') === 'true';
-    let isProMode = false; // يبدأ دائماً كإبداعي حتى يختار الزائر
+    let isProMode = false; 
+
+    // إعادة تعيين الثيم إلى الليلي عند فتح الموقع مجدداً
+    localStorage.setItem('asmaa_theme', 'night');
+    document.body.classList.remove('day-mode');
+    
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.querySelector('.icon').textContent = '🌙';
+    }
 
     const welcomeScreen = document.getElementById('welcome-screen');
     const btnCreative = document.getElementById('btn-creative-mode');
     const btnPro = document.getElementById('btn-pro-mode');
 
-    if (isDayMode) document.body.classList.add('day-mode');
     if (isColorblind) document.body.classList.add('colorblind-mode');
     
     // إظهار شاشة الترحيب دائماً
@@ -380,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const themeToggleBtn = document.getElementById('theme-toggle');
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('day-mode');
